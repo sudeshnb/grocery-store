@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/checkout_bar_model.dart';
 import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class CheckoutBar extends StatelessWidget {
@@ -19,9 +20,12 @@ class CheckoutBar extends StatelessWidget {
     );
   }
 
-  const CheckoutBar({required this.model});
+  const CheckoutBar({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
-  final  List<IconData> icons =const [
+  final List<IconData> icons = const [
     Icons.location_on,
     Icons.directions_car,
     Icons.view_headline,
@@ -92,13 +96,13 @@ class CheckoutBar extends StatelessWidget {
           }
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          margin: EdgeInsets.only(bottom: 10, top: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          margin: const EdgeInsets.only(bottom: 10, top: 10),
           decoration: BoxDecoration(
               color: (model.currentPage == index)
                   ? themeModel.accentColor
                   : Colors.transparent,
-              borderRadius: BorderRadius.all(Radius.circular(30))),
+              borderRadius: const BorderRadius.all(Radius.circular(30))),
           child: Icon(
             icons[index],
             size: 25,
@@ -112,15 +116,15 @@ class CheckoutBar extends StatelessWidget {
 
     return Row(
       children: [
-        Spacer(),
+        const Spacer(),
         items[0],
-        Spacer(),
+        const Spacer(),
         items[1],
-        Spacer(),
+        const Spacer(),
         items[2],
-        Spacer(),
+        const Spacer(),
         items[3],
-        Spacer(),
+        const Spacer(),
       ],
     );
   }

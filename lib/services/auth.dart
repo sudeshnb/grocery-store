@@ -33,7 +33,6 @@ abstract class AuthBase {
   String get displayName;
 
   Future<String> get token;
-
 }
 
 class Auth implements AuthBase {
@@ -44,8 +43,10 @@ class Auth implements AuthBase {
     return _firebaseAuth.authStateChanges();
   }
 
+  @override
   String get uid => _firebaseAuth.currentUser!.uid;
 
+  @override
   Future<String> get token => _firebaseAuth.currentUser!.getIdToken();
 
   @override
@@ -62,12 +63,14 @@ class Auth implements AuthBase {
     await _firebaseAuth.currentUser!.updatePhotoURL(path);
   }
 
+  @override
   Future<void> updateNameAndEmail(String email, String name) async {
     await _firebaseAuth.currentUser!.updateDisplayName(name);
 
     await _firebaseAuth.currentUser!.updateEmail(email);
   }
 
+  @override
   Future<void> changePassword(String password) async {
     await _firebaseAuth.currentUser!.updatePassword(password);
   }
@@ -114,7 +117,6 @@ class Auth implements AuthBase {
 
   @override
   Future<void> signInWithFacebook() async {
-
     final LoginResult result = await FacebookAuth.instance.login(permissions: [
       'public_profile'
     ]); // by default we request the email and the public profile
@@ -131,8 +133,6 @@ class Auth implements AuthBase {
         message: 'Sign in aborted by user',
       );
     }
-
-
   }
 
   @override

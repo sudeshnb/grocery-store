@@ -21,7 +21,7 @@ class ProductsReaderBloc {
 
   bool _canLoadMore = true;
 
-  List<DocumentSnapshot> _lastDocuments = [];
+  List<DocumentSnapshot> lastDocuments = [];
 
   List<Product> savedProducts = [];
 
@@ -48,7 +48,7 @@ class ProductsReaderBloc {
   Future<List<DocumentSnapshot>> _getCategoryProducts(int length) async {
     final collection = await (database.getFutureCollectionWithRangeAndValue(
       'products',
-      startAfter: _lastDocuments.isEmpty ? null : _lastDocuments.last,
+      startAfter: lastDocuments.isEmpty ? null : lastDocuments.last,
       length: length,
       orderBy: 'date',
       key: 'category',
@@ -56,7 +56,7 @@ class ProductsReaderBloc {
     ));
 
     if (collection.docs.isNotEmpty) {
-      _lastDocuments.add(collection.docs.last);
+      lastDocuments.add(collection.docs.last);
     }
 
     return collection.docs;

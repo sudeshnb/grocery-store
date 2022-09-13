@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/orders_bloc.dart';
 import 'package:grocery/models/data_models/orders_item.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
@@ -8,12 +10,14 @@ import 'package:grocery/services/auth.dart';
 import 'package:grocery/services/database.dart';
 import 'package:grocery/ui/orders/orders_card.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
 
 class Orders extends StatefulWidget {
   final OrdersBloc bloc;
 
-  const Orders({required this.bloc});
+  const Orders({
+    Key? key,
+    required this.bloc,
+  }) : super(key: key);
 
   static create(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
@@ -35,7 +39,7 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -50,11 +54,10 @@ class _OrdersState extends State<Orders> {
     final themeModel = Provider.of<ThemeModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title:Text(
-            "My orders",
+        title: Text(
+          "My orders",
           style: themeModel.theme.textTheme.headline3,
         ),
-
         backgroundColor: themeModel.secondBackgroundColor,
         centerTitle: true,
         leading: IconButton(
@@ -70,7 +73,7 @@ class _OrdersState extends State<Orders> {
       body: NotificationListener(
         onNotification: (ScrollNotification notification) {
           if (notification is ScrollEndNotification) {
-            if (_scrollController.position.extentAfter == 0) {
+            if (scrollController.position.extentAfter == 0) {
               widget.bloc.loadProducts(10);
             }
           }
@@ -94,14 +97,12 @@ class _OrdersState extends State<Orders> {
                             fit: BoxFit.cover,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Text(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text(
                                 'No order found!',
-                              style: themeModel.theme.textTheme.headline3!.apply(
-                                color: themeModel.accentColor
-                              ),
-                            )
-                          )
+                                style: themeModel.theme.textTheme.headline3!
+                                    .apply(color: themeModel.accentColor),
+                              ))
                         ]),
                   ),
                 );
@@ -110,9 +111,9 @@ class _OrdersState extends State<Orders> {
                 List<OrdersItem> orders = snapshot.data!;
 
                 return ListView.builder(
-                  controller: _scrollController,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(bottom: 20),
+                  controller: scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.only(bottom: 20),
                   itemCount: orders.length,
                   itemBuilder: (context, position) {
                     return FadeIn(
@@ -134,7 +135,7 @@ class _OrdersState extends State<Orders> {
               );
             } else {
               ///If loading
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }

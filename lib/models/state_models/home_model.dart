@@ -17,7 +17,7 @@ class HomeModel {
       if (index == _index - 1 || index == _index + 1) {
         pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.ease,
         );
       } else {

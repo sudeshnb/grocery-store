@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/data_models/product.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/widgets/transparent_image.dart';
-import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
 
-
-
   final void Function() onTap;
 
-  const ProductCard({
-    required this.product,
-    required this.onTap,
-
-  });
+  const ProductCard({Key? key, required this.product, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +26,23 @@ class ProductCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                   blurRadius: 2,
-                  offset: Offset(0, 5),
+                  offset: const Offset(0, 5),
                   color: themeModel.shadowColor)
             ]),
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: Hero(
-                  tag: product.reference,
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(product.image),
-                    placeholder: MemoryImage(kTransparentImage),
-                  ))),
+              Expanded(
+                  child: Hero(
+                      tag: product.reference,
+                      child: FadeInImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(product.image),
+                        placeholder: MemoryImage(kTransparentImage),
+                      ))),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
@@ -53,25 +50,16 @@ class ProductCard extends StatelessWidget {
                   style: themeModel.theme.textTheme.bodyText1,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-
                 ),
-
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: GestureDetector(
-                  child:
-
-                  Text(
-                    "${(product.pricePerKg == null)
-                        ? product.pricePerPiece
-                        : product.pricePerKg}\$",
-                    style: themeModel.theme.textTheme.bodyText1!.apply(
-                        color: themeModel.priceColor
-                    ),
-
+                  child: Text(
+                    "${(product.pricePerKg == null) ? product.pricePerPiece : product.pricePerKg}\$",
+                    style: themeModel.theme.textTheme.bodyText1!
+                        .apply(color: themeModel.priceColor),
                   ),
-
                   onTap: () {},
                 ),
               ),

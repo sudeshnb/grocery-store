@@ -35,7 +35,7 @@ class SummaryBloc {
 
     couponController.add(true);
 
-    if (code.replaceAll(" ", "").length == 0) {
+    if (code.replaceAll(" ", "").isEmpty) {
       validCode = false;
       message = "Please enter a valid code";
       if (checkoutModel.coupon != null) {
@@ -52,7 +52,7 @@ class SummaryBloc {
 
       if (document.data() == null) {
         validCode = false;
-        message = "This coupon code doesn\'t exist";
+        message = "This coupon code doesn't exist";
 
         if (checkoutModel.coupon != null) {
           checkoutModel.coupon = null;

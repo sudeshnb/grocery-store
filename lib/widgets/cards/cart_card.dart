@@ -14,19 +14,14 @@ class CartCard extends StatelessWidget {
   final Future Function(String, String) updateUnit;
   final void Function() goToProduct;
 
-  const CartCard({
-    required this.cartItem,
-    required this.delete,
-    required this.updateQuantity,
-    required this.updateUnit,
-    required this.goToProduct});
-
-
-
-
-
-
-
+  const CartCard(
+      {Key? key,
+      required this.cartItem,
+      required this.delete,
+      required this.updateQuantity,
+      required this.updateUnit,
+      required this.goToProduct})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +31,14 @@ class CartCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: themeModel.secondBackgroundColor,
-          borderRadius:const BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           boxShadow: [
             BoxShadow(
                 blurRadius: 2,
-                offset:const Offset(0, 5),
+                offset: const Offset(0, 5),
                 color: themeModel.shadowColor)
           ]),
-      margin:const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: goToProduct,
         child: Container(
@@ -54,7 +49,7 @@ class CartCard extends StatelessWidget {
               GestureDetector(
                 onTap: goToProduct,
                 child: Container(
-                  padding:const EdgeInsets.only(top: 20, bottom: 20, left: 20),
+                  padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20),
                   color: Colors.transparent,
                   child: Hero(
                     tag: cartItem.product!.reference,
@@ -69,82 +64,72 @@ class CartCard extends StatelessWidget {
               ),
               Expanded(
                   child: GestureDetector(
-                    onTap: goToProduct,
-                    child: Container(
-                      color: Colors.transparent,
-                      padding:const EdgeInsets.only(top: 20, bottom: 20, right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding:const EdgeInsets.only(left: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  cartItem.product!.title,
-                                style: themeModel.theme.textTheme.headline3,
-                              )
-
-
-                            ),
-                          ),
-                          Padding(
-                            padding:const EdgeInsets.only(top: 10, left: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child:Text(
-                                  cartItem.quantity.toString() +
-                                      " " +
-                                      cartItem.unit,
-                                style: themeModel.theme.textTheme.bodyText1!.apply(
-                                  color: themeModel.secondTextColor
-                                ),
-                              )
-
-                            ),
-                          ),
-                          Padding(
-                            padding:const EdgeInsets.only(
-                              top: 10,
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding:const EdgeInsets.only(left: 10),
-                                child: Text(
-                                    (Decimal.parse(((cartItem.unit == 'Piece')
-                                        ? cartItem
-                                        .product!.pricePerPiece
-                                        : (cartItem.unit == 'KG')
-                                        ? cartItem
-                                        .product!.pricePerKg
-                                        : cartItem.product!
-                                        .pricePerKg! *
-                                        0.001)
-                                        .toString()) *
-                                        Decimal.parse(
-                                            cartItem.quantity.toString()))
-                                        .toString() +
-                                        "\$",
-
-                                  style: themeModel.theme.textTheme.bodyText1!.apply(
-                                    color: themeModel.priceColor
-                                  ),
-
-                                )
-
-                              ),
-                            ),
-                          )
-                        ],
+                onTap: goToProduct,
+                child: Container(
+                  color: Colors.transparent,
+                  padding:
+                      const EdgeInsets.only(top: 20, bottom: 20, right: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              cartItem.product!.title,
+                              style: themeModel.theme.textTheme.headline3,
+                            )),
                       ),
-                    ),
-                  )),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 10),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              cartItem.quantity.toString() +
+                                  " " +
+                                  cartItem.unit,
+                              style: themeModel.theme.textTheme.bodyText1!
+                                  .apply(color: themeModel.secondTextColor),
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                (Decimal.parse(((cartItem.unit == 'Piece')
+                                                    ? cartItem
+                                                        .product!.pricePerPiece
+                                                    : (cartItem.unit == 'KG')
+                                                        ? cartItem
+                                                            .product!.pricePerKg
+                                                        : cartItem.product!
+                                                                .pricePerKg! *
+                                                            0.001)
+                                                .toString()) *
+                                            Decimal.parse(
+                                                cartItem.quantity.toString()))
+                                        .toString() +
+                                    "\$",
+                                style: themeModel.theme.textTheme.bodyText1!
+                                    .apply(color: themeModel.priceColor),
+                              )),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:const EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       right: 10,
                     ),
                     child: GestureDetector(
@@ -159,7 +144,7 @@ class CartCard extends StatelessWidget {
                                 return EditCarItem.create(
                                     pricePerKg: cartItem.product!.pricePerKg,
                                     pricePerPiece:
-                                    cartItem.product!.pricePerPiece,
+                                        cartItem.product!.pricePerPiece,
                                     quantity: cartItem.quantity,
                                     initialUnitTitle: cartItem.unit,
                                     updateQuantity: updateQuantity,
@@ -169,7 +154,7 @@ class CartCard extends StatelessWidget {
                         }),
                   ),
                   Padding(
-                    padding:const EdgeInsets.only(right: 10, top: 20),
+                    padding: const EdgeInsets.only(right: 10, top: 20),
                     child: GestureDetector(
                         child: Icon(
                           Icons.delete,
@@ -182,58 +167,56 @@ class CartCard extends StatelessWidget {
                               builder: (context) {
                                 return Container(
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(15),
                                         topRight: Radius.circular(15),
                                       ),
                                       color: themeModel.theme.backgroundColor),
-                                  padding: EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
                                   child: Wrap(
                                     children: [
                                       Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
+                                          alignment: Alignment.center,
+                                          child: Text(
                                             "Are you Sure?",
-                                          style: themeModel.theme.textTheme.headline2!,
-                                        )
-
-
-
-                                      ),
+                                            style: themeModel
+                                                .theme.textTheme.headline2!,
+                                          )),
                                       Align(
                                         alignment: Alignment.center,
                                         child: Padding(
-                                          padding:const EdgeInsets.all(20),
+                                          padding: const EdgeInsets.all(20),
                                           child: Row(
                                             mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                                MainAxisAlignment.center,
                                             children: [
                                               DefaultButton(
                                                 widget: Text(
-                                          "Cancel",
-                                            style: themeModel.theme.textTheme.headline3!.apply(
-                                              color: themeModel.secondTextColor
-                                            ),
-                                          ),
-
-
-
+                                                  "Cancel",
+                                                  style: themeModel.theme
+                                                      .textTheme.headline3!
+                                                      .apply(
+                                                          color: themeModel
+                                                              .secondTextColor),
+                                                ),
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
                                                 color:
-                                                themeModel.secondTextColor,
+                                                    themeModel.secondTextColor,
                                                 border: true,
                                               ),
                                               Padding(
-                                                padding:
-                                                const EdgeInsets.only(left: 20),
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
                                                 child: DefaultButton(
                                                     widget: Text(
-                                                        "Delete",
-                                                      style: themeModel.theme.textTheme.headline3!.apply(
-                                                        color: Colors.white
-                                                      ),
+                                                      "Delete",
+                                                      style: themeModel.theme
+                                                          .textTheme.headline3!
+                                                          .apply(
+                                                              color:
+                                                                  Colors.white),
                                                     ),
                                                     onPressed: () async {
                                                       await delete();

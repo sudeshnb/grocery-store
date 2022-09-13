@@ -63,14 +63,14 @@ class CartBloc {
   ///Get total price
   num getTotal(List<CartItem> cartItems) {
     num sum = 0;
-    cartItems.forEach((cartItem) {
+    for (var cartItem in cartItems) {
       sum += ((cartItem.unit == 'Piece')
               ? cartItem.product!.pricePerPiece
               : (cartItem.unit == 'KG')
                   ? cartItem.product!.pricePerKg!
                   : cartItem.product!.pricePerKg! * 0.001) *
           cartItem.quantity;
-    });
+    }
 
     return sum;
   }

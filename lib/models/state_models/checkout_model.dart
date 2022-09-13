@@ -14,7 +14,7 @@ class CheckoutModel with ChangeNotifier {
   void goToPage(int index) {
     pageController.animateToPage(
       index,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
     pageIndex = index;
@@ -26,7 +26,7 @@ class CheckoutModel with ChangeNotifier {
       if (address != null) {
         pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.ease,
         );
         pageIndex = index;
@@ -45,7 +45,7 @@ class CheckoutModel with ChangeNotifier {
       if (shippingMethod != null) {
         pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.ease,
         );
         pageIndex = index;
@@ -63,7 +63,7 @@ class CheckoutModel with ChangeNotifier {
         if (cartItems != []) {
           pageController.animateToPage(
             index,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.ease,
           );
           pageIndex = index;
@@ -97,7 +97,7 @@ class CheckoutModel with ChangeNotifier {
   num getTotal() {
     num sum = 0;
 
-    cartItems!.forEach((cartItem) {
+    for (var cartItem in cartItems!) {
       sum += num.parse((Decimal.parse(((cartItem.unit == 'Piece')
                       ? cartItem.product!.pricePerPiece
                       : (cartItem.unit == 'KG')
@@ -106,7 +106,7 @@ class CheckoutModel with ChangeNotifier {
                   .toString()) *
               Decimal.parse(cartItem.quantity.toString()))
           .toString());
-    });
+    }
 
     return sum;
   }
@@ -119,6 +119,12 @@ class CheckoutModel with ChangeNotifier {
     if (coupon != null) {
       if (coupon!.type == 'percentage') {
         // TODO
+
+        final value = (Decimal.parse((100 - coupon!.value).toString()) /
+                Decimal.parse("100"))
+            .toString();
+        sum = num.parse((Decimal.parse(sum.toString()) * (Decimal.parse(value)))
+            .toString());
         // sum = num.parse((Decimal.parse(sum.toString()) *
         //         (Decimal.parse((100 - coupon!.value).toString()) /
         //             Decimal.parse("100")))

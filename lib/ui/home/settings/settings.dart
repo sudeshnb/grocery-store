@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/settings_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/services/auth.dart';
 import 'package:grocery/services/database.dart';
-
 import 'package:grocery/ui/addresses/addresses.dart';
 import 'package:grocery/ui/home/settings/update_info.dart';
 import 'package:grocery/ui/home/settings/upload_image.dart';
@@ -11,12 +12,14 @@ import 'package:grocery/ui/orders/orders.dart';
 import 'package:grocery/widgets/cards/settings_card.dart';
 import 'package:grocery/widgets/dialogs/reminder_dialog.dart';
 import 'package:grocery/widgets/transparent_image.dart';
-import 'package:provider/provider.dart';
 
 class Settings extends StatelessWidget {
   final SettingsModel model;
 
-  const Settings({required this.model});
+  const Settings({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
@@ -38,17 +41,17 @@ class Settings extends StatelessWidget {
       children: [
         ///Profile information
         Container(
-          margin: EdgeInsets.only(bottom: 20),
-          padding: EdgeInsets.all(20),
+          margin: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   bottomRight: Radius.circular(15),
                   bottomLeft: Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
                     blurRadius: 30,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                     color: themeModel.shadowColor)
               ]),
           child: Row(
@@ -69,7 +72,7 @@ class Settings extends StatelessWidget {
                     placeholder: MemoryImage(kTransparentImage),
                     image: (model.profileImage != null)
                         ? NetworkImage(model.profileImage!)
-                        : AssetImage('images/settings/profile.png')
+                        : const AssetImage('images/settings/profile.png')
                             as ImageProvider,
                     width: 60,
                     height: 60,
@@ -77,7 +80,8 @@ class Settings extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(child: GestureDetector(
+              Expanded(
+                  child: GestureDetector(
                 onTap: () {
                   UpdateInfo.create(context).then((value) {
                     if (value != null) {
@@ -87,12 +91,12 @@ class Settings extends StatelessWidget {
                 },
                 child: Container(
                   color: Colors.transparent,
-                  padding: EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                          padding: EdgeInsets.only(bottom: 2),
+                          padding: const EdgeInsets.only(bottom: 2),
                           child: Text(
                             model.displayName ?? '',
                             style: themeModel.theme.textTheme.headline3,
@@ -107,16 +111,14 @@ class Settings extends StatelessWidget {
                 ),
               )),
               IconButton(
-                onPressed: () async{
-                 /* UpdateInfo.create(context).then((value) {
+                onPressed: () async {
+                  /* UpdateInfo.create(context).then((value) {
                     if (value != null) {
                       model.updateWidget();
                     }
                   });
 
                   */
-
-
                 },
                 icon: Icon(
                   Icons.edit,
@@ -158,16 +160,16 @@ class Settings extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
 
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             bottom: 10,
             left: 20,
             right: 20,
           ),
           //   padding: EdgeInsets.all(20),
           child: ListTile(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             onTap: () {
@@ -195,18 +197,19 @@ class Settings extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(15))),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
 
-          margin: EdgeInsets.only(bottom: 40, left: 20, right: 20, top: 20),
+          margin:
+              const EdgeInsets.only(bottom: 40, left: 20, right: 20, top: 20),
           //   padding: EdgeInsets.all(20),
           child: ListTile(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               onTap: () {
                 model.signOut(context);
               },
-              leading: Icon(
+              leading: const Icon(
                 Icons.exit_to_app,
                 color: Colors.red,
               ),

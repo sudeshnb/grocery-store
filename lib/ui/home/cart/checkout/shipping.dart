@@ -1,19 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/shipping_bloc.dart';
-import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/data_models/shipping_method.dart';
+import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/services/auth.dart';
 import 'package:grocery/services/database.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
 
 class Shipping extends StatefulWidget {
   final ShippingBloc bloc;
 
-  const Shipping({required this.bloc});
+  const Shipping({
+    Key? key,
+    required this.bloc,
+  }) : super(key: key);
 
   static Widget create(BuildContext context, {String? selected}) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -35,15 +38,9 @@ class Shipping extends StatefulWidget {
   _ShippingState createState() => _ShippingState();
 }
 
-class _ShippingState extends State<Shipping>{
-
-
-
-
-
+class _ShippingState extends State<Shipping> {
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     final themeModel = Provider.of<ThemeModel>(context);
 
@@ -54,7 +51,7 @@ class _ShippingState extends State<Shipping>{
           List<ShippingMethod> shippingMethods = shippingSnapshot.data!;
 
           if (shippingMethods.isEmpty) {
-            return Center();
+            return const Center();
           } else {
             final checkoutModel =
                 Provider.of<CheckoutModel>(context, listen: false);
@@ -68,22 +65,21 @@ class _ShippingState extends State<Shipping>{
               ),
               shrinkWrap: true,
               //   physics: NeverScrollableScrollPhysics(),
-              padding:
-                  EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 100),
-              itemBuilder: (context,position){
-
-
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 20, bottom: 100),
+              itemBuilder: (context, position) {
                 return FadeIn(
                   child: GestureDetector(
                     child: Container(
-                      margin: EdgeInsets.all(6),
+                      margin: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                           color: themeModel.secondBackgroundColor,
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
                           boxShadow: [
                             BoxShadow(
                                 blurRadius: 2,
-                                offset: Offset(0, 5),
+                                offset: const Offset(0, 5),
                                 color: themeModel.shadowColor)
                           ]),
                       child: Column(
@@ -91,22 +87,19 @@ class _ShippingState extends State<Shipping>{
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Text(
                                 shippingMethods[position].title,
                                 style: themeModel.theme.textTheme.headline3,
-                              )
-
-                          ),
+                              )),
                           Padding(
-                            padding: EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10),
                             child: GestureDetector(
                               child: Text(
                                 shippingMethods[position].duration! +
                                     " (${shippingMethods[position].price}\$)",
-                                style: themeModel.theme.textTheme.subtitle1!.apply(
-                                    color: themeModel.secondTextColor
-                                ),
+                                style: themeModel.theme.textTheme.subtitle1!
+                                    .apply(color: themeModel.secondTextColor),
                               ),
                               onTap: () {},
                             ),
@@ -127,7 +120,8 @@ class _ShippingState extends State<Shipping>{
                     ),
                     onTap: () {
                       if (!shippingMethods[position].selected) {
-                        widget.bloc.setSelectedShipping(shippingMethods[position].id!);
+                        widget.bloc
+                            .setSelectedShipping(shippingMethods[position].id!);
                       }
                     },
                   ),
@@ -139,7 +133,7 @@ class _ShippingState extends State<Shipping>{
         } else if (shippingSnapshot.hasError) {
           return FadeIn(
             child: Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: Center(
                 child: SvgPicture.asset(
                   'images/state_images/error.svg',
@@ -150,7 +144,7 @@ class _ShippingState extends State<Shipping>{
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

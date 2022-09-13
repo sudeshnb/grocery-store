@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/addresses_bloc.dart';
 import 'package:grocery/models/data_models/address.dart';
 import 'package:grocery/models/state_models/checkout_model.dart';
@@ -10,13 +12,16 @@ import 'package:grocery/services/database.dart';
 import 'package:grocery/ui/addresses/add_address.dart';
 import 'package:grocery/widgets/cards/address_card.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
 
 class Addresses extends StatefulWidget {
   final AddressesBloc bloc;
   final EdgeInsets? padding;
 
-  const Addresses({required this.bloc, this.padding});
+  const Addresses({
+    Key? key,
+    required this.bloc,
+    this.padding,
+  }) : super(key: key);
 
   static Widget create(BuildContext context,
       {EdgeInsets? padding, String? selected}) {
@@ -78,15 +83,11 @@ class Addresses extends StatefulWidget {
   _AddressesState createState() => _AddressesState();
 }
 
-class _AddressesState extends State<Addresses>
-    {
-
-
+class _AddressesState extends State<Addresses> {
   late Stream<List<Address>> addressesStream;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     addressesStream = widget.bloc.getAddresses();
@@ -97,16 +98,16 @@ class _AddressesState extends State<Addresses>
     final themeModel = Provider.of<ThemeModel>(context);
     double width = MediaQuery.of(context).size.width;
     return ListView(
-      padding: widget.padding ?? EdgeInsets.all(20),
+      padding: widget.padding ?? const EdgeInsets.all(20),
       children: [
         ///Add address button
         GestureDetector(
           child: Container(
             decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -115,7 +116,7 @@ class _AddressesState extends State<Addresses>
                   color: themeModel.accentColor,
                 ),
                 Padding(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 20),
                     child: Text(
                       'Add address',
                       style: themeModel.theme.textTheme.headline3!
@@ -141,7 +142,7 @@ class _AddressesState extends State<Addresses>
                 final checkoutModel =
                     Provider.of<CheckoutModel>(context, listen: false);
 
-                if (addresses.length == 0) {
+                if (addresses.isEmpty) {
                   checkoutModel.address = null;
                 } else {
                   checkoutModel.address = addresses
@@ -149,7 +150,7 @@ class _AddressesState extends State<Addresses>
                       .single;
                 }
               } catch (e) {
-                print("CheckoutModel not in tree");
+                // print("CheckoutModel not in tree");
               }
 
               return Column(
@@ -162,7 +163,7 @@ class _AddressesState extends State<Addresses>
               ///If there is an error
               return FadeIn(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Center(
                     child: SvgPicture.asset(
                       'images/state_images/error.svg',
@@ -174,7 +175,7 @@ class _AddressesState extends State<Addresses>
               );
             } else {
               ///If loading
-              return Center(
+              return const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: CircularProgressIndicator(),

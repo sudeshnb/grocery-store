@@ -25,17 +25,16 @@ class ChangePasswordModel with ChangeNotifier {
         Navigator.pop(context);
 
         showDialog(
-          context: context,
-          builder: (context) =>const SuccessDialog(message: "The password is changed")
-        );
+            context: context,
+            builder: (context) =>
+                const SuccessDialog(message: "The password is changed"));
       } catch (e) {
         if (e is FirebaseAuthException) {
           FirebaseAuthException exception = e;
 
           showDialog(
               context: context,
-              builder: (context) =>
-                  ErrorDialog(message: exception.message!));
+              builder: (context) => ErrorDialog(message: exception.message!));
         }
       } finally {
         isLoading = false;
@@ -71,7 +70,7 @@ class ChangePasswordModel with ChangeNotifier {
       showDialog(
           context: context,
           builder: (context) =>
-              const ErrorDialog(message:  "Passwords did\'t match"));
+              const ErrorDialog(message: "Passwords did't match"));
     }
 
     return result;

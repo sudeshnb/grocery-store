@@ -1,18 +1,18 @@
 class ProjectConfiguration {
   //TODO: set your logo path
-  static final String logo = "images/logo.png";
+  static String logo = "images/logo.png";
 
-  static final bool useCloudFunctions = false;
+  static bool useCloudFunctions = false;
   //TODO: if useCloudFunctions==false add your notificationsApi and stripePaymentApi
   //Add your add notifications api
-  static final notificationsApi = "";
+  static const notificationsApi = "";
 
   ///Add your Stripe Api
-  static final stripePaymentApi = "";
+  static const stripePaymentApi = "";
 
   //TODO: Put your Strip publishable key and merchant id
-  static final String stripePublishableKey = "";
-  static final String stripeMerchantId = "Test";
+  static const String stripePublishableKey = "";
+  static const String stripeMerchantId = "Test";
 
   static final List<String> pngImages = [
     "images/logo.png",

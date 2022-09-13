@@ -1,20 +1,24 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/state_models/payment_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
+import 'package:grocery/services/auth.dart';
+import 'package:grocery/services/database.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
 import 'package:grocery/widgets/dialogs/error_dialog.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
-import 'package:grocery/services/auth.dart';
-import 'package:grocery/services/database.dart';
-import 'package:grocery/models/state_models/checkout_model.dart';
-import 'package:decimal/decimal.dart';
 
 class Payment extends StatefulWidget {
   final PaymentModel model;
 
-  const Payment({required this.model});
+  const Payment({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
@@ -33,10 +37,7 @@ class Payment extends StatefulWidget {
   _PaymentState createState() => _PaymentState();
 }
 
-class _PaymentState extends State<Payment>
-    with TickerProviderStateMixin{
-
-
+class _PaymentState extends State<Payment> with TickerProviderStateMixin {
   TextEditingController nameController = TextEditingController();
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
@@ -54,13 +55,13 @@ class _PaymentState extends State<Payment>
     num total = checkoutModel.getDiscountedTotal();
 
     return ListView(
-      padding: EdgeInsets.only(left: 20, right: 20, bottom: 100, top: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 100, top: 20),
       children: [
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Container(
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
                 color: themeModel.backgroundColor,
                 border: Border.all(
@@ -68,11 +69,11 @@ class _PaymentState extends State<Payment>
                     color: (widget.model.paymentViaDelivery)
                         ? themeModel.accentColor
                         : themeModel.secondBackgroundColor),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 2,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                     color: themeModel.shadowColor,
                   )
                 ]),
@@ -82,7 +83,7 @@ class _PaymentState extends State<Payment>
                 color: themeModel.textColor,
               ),
               tileColor: themeModel.backgroundColor,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               onTap: () {
                 if (!widget.model.paymentViaDelivery) {
                   widget.model
@@ -106,9 +107,9 @@ class _PaymentState extends State<Payment>
           ),
         ),
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 color: themeModel.backgroundColor,
                 border: Border.all(
@@ -116,11 +117,11 @@ class _PaymentState extends State<Payment>
                     color: (!widget.model.paymentViaDelivery)
                         ? themeModel.accentColor
                         : themeModel.secondBackgroundColor),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 2,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                     color: themeModel.shadowColor,
                   )
                 ]),
@@ -130,7 +131,7 @@ class _PaymentState extends State<Payment>
                 color: themeModel.textColor,
               ),
               tileColor: themeModel.backgroundColor,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               onTap: () {
                 widget.model
                     .changePaymentMethod(!widget.model.paymentViaDelivery);
@@ -154,16 +155,16 @@ class _PaymentState extends State<Payment>
 
         ///Total price of orders
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               children: [
                 Text(
                   'Order:',
                   style: themeModel.theme.textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   order.toString() + '\$',
                   style: themeModel.theme.textTheme.headline3!
@@ -176,16 +177,16 @@ class _PaymentState extends State<Payment>
 
         ///Delivery price
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               children: [
                 Text(
                   'Delivery:',
                   style: themeModel.theme.textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   checkoutModel.shippingMethod!.price.toString() + '\$',
                   style: themeModel.theme.textTheme.headline3!
@@ -197,18 +198,18 @@ class _PaymentState extends State<Payment>
         ),
 
         (checkoutModel.coupon == null)
-            ? SizedBox()
+            ? const SizedBox()
             : FadeIn(
-                duration: Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 400),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   child: Row(
                     children: [
                       Text(
                         'Coupon:',
                         style: themeModel.theme.textTheme.bodyText1,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         "-" +
                             Decimal.parse(
@@ -227,16 +228,16 @@ class _PaymentState extends State<Payment>
 
         ///Total price: order + delivery
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Padding(
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               children: [
                 Text(
                   'Total:',
                   style: themeModel.theme.textTheme.bodyText1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   total.toString() + '\$',
                   style: themeModel.theme.textTheme.headline3!
@@ -248,22 +249,22 @@ class _PaymentState extends State<Payment>
         ),
 
         (widget.model.isLoading)
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : FadeIn(
-                duration: Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 400),
                 child: DefaultButton(
                     color: themeModel.accentColor,
                     widget: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward,
                           color: Colors.white,
                         ),
                         Padding(
-                            padding: EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: 10),
                             child: Text(
                               "Confirm Order",
                               style: themeModel.theme.textTheme.headline3!
@@ -276,7 +277,7 @@ class _PaymentState extends State<Payment>
                         if (total < 0.5) {
                           showDialog(
                               context: context,
-                              builder: (context) => ErrorDialog(
+                              builder: (context) => const ErrorDialog(
                                   message:
                                       "You can't make payment under 0.5\$"));
                         } else {

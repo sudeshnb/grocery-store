@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/models/state_models/orders_card_model.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/data_models/orders_item.dart';
 import 'package:grocery/models/data_models/orders_product_item.dart';
+import 'package:grocery/models/state_models/orders_card_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
 
 class OrdersCard extends StatefulWidget {
   final OrdersCardModel model;
   final OrdersItem order;
 
-  const OrdersCard({required this.model, required this.order});
+  const OrdersCard({
+    Key? key,
+    required this.model,
+    required this.order,
+  }) : super(key: key);
 
   static Widget create({required OrdersItem order}) {
     return ChangeNotifierProvider<OrdersCardModel>(
@@ -34,13 +39,12 @@ class _OrdersCardState extends State<OrdersCard>
     with TickerProviderStateMixin<OrdersCard> {
   @override
   Widget build(BuildContext context) {
-
     final themeModel = Provider.of<ThemeModel>(context, listen: false);
 
     List<OrdersProductItem> products = widget.order.products;
 
     return AnimatedSize(
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.ease,
       child: GestureDetector(
         onTap: () {
@@ -48,15 +52,16 @@ class _OrdersCardState extends State<OrdersCard>
           widget.model.updateWidget();
         },
         child: Container(
-          margin: EdgeInsets.only(left: 20, right: 20, top: 20),
-          padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+          margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
           decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
               boxShadow: [
                 BoxShadow(
                     blurRadius: 30,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                     color: themeModel.shadowColor)
               ]),
           child: Column(
@@ -70,7 +75,7 @@ class _OrdersCardState extends State<OrdersCard>
                     style: themeModel.theme.textTheme.headline3,
                   )),
 
-                //  Spacer(),
+                  //  Spacer(),
                   IconButton(
                       icon: Icon(
                         (widget.model.isExpended)
@@ -91,64 +96,60 @@ class _OrdersCardState extends State<OrdersCard>
                             children: [
                               ///Order date
                               Text(
-                                  "Date: ",
+                                "Date: ",
                                 style: themeModel.theme.textTheme.bodyText2,
                               ),
 
-                              Spacer(),
+                              const Spacer(),
                               Text(
-                                "${widget.order.date}",
-                                style: themeModel.theme.textTheme.bodyText2!.apply(
-                                  color: themeModel.secondTextColor
-                                ),
+                                "${widget.order.date} ",
+                                style: themeModel.theme.textTheme.bodyText2!
+                                    .apply(color: themeModel.secondTextColor),
                               ),
-
                             ],
                           ),
 
                           ///List or orders
                           Padding(
-                            padding: EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Column(
                               children:
                                   List.generate(products.length, (position) {
                                 return Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-
                                     Expanded(
                                       child: Text(
                                         products[position].title,
-                                        style: themeModel.theme.textTheme.bodyText2,
+                                        style: themeModel
+                                            .theme.textTheme.bodyText2,
                                       ),
-
                                     ),
                                     Expanded(
                                       child: Padding(
-                                          padding:
-                                          EdgeInsets.only(left: 10, right: 10),
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
                                           child: Text(
                                             products[position].quantity,
-                                            style: themeModel.theme.textTheme.bodyText2!.apply(
-                                                color: themeModel.secondTextColor
-                                            ),
-                                          )
-                                      ),
-
+                                            style: themeModel
+                                                .theme.textTheme.bodyText2!
+                                                .apply(
+                                                    color: themeModel
+                                                        .secondTextColor),
+                                          )),
                                     ),
                                     Expanded(
-                                      child:Align(
-                                        alignment: Alignment.centerRight,
-
-                                        child: Text(
-                                          products[position].price.toString() +
-                                              "\$",
-                                          style: themeModel.theme.textTheme.bodyText2!.apply(
-                                              color: themeModel.priceColor
-                                          ),
-                                        ),
-                                      ))
-
+                                        child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        products[position].price.toString() +
+                                            "\$",
+                                        style: themeModel
+                                            .theme.textTheme.bodyText2!
+                                            .apply(
+                                                color: themeModel.priceColor),
+                                      ),
+                                    ))
                                   ],
                                 );
                               }),
@@ -157,7 +158,7 @@ class _OrdersCardState extends State<OrdersCard>
 
                           ///Order status
                           Padding(
-                            padding: EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -170,8 +171,8 @@ class _OrdersCardState extends State<OrdersCard>
                                           : (widget.order.status == 'Declined')
                                               ? Colors.red
                                               : Colors.orange),
-                                  padding: EdgeInsets.all(5),
-                                  margin: EdgeInsets.only(right: 10),
+                                  padding: const EdgeInsets.all(5),
+                                  margin: const EdgeInsets.only(right: 10),
                                   child: Icon(
                                     (widget.order.status == 'Delivered')
                                         ? Icons.done
@@ -182,27 +183,27 @@ class _OrdersCardState extends State<OrdersCard>
                                     color: Colors.white,
                                   ),
                                 ),
-
                                 Text(
-                                    widget.order.status,
-                                  style: themeModel.theme.textTheme.headline3!.apply(
-                                    color: (widget.order.status == 'Delivered')
-                                        ? Colors.green
-                                        : (widget.order.status == 'Declined')
-                                        ? Colors.red
-                                        : Colors.orange
-                                  ),
+                                  widget.order.status,
+                                  style: themeModel.theme.textTheme.headline3!
+                                      .apply(
+                                          color: (widget.order.status ==
+                                                  'Delivered')
+                                              ? Colors.green
+                                              : (widget.order.status ==
+                                                      'Declined')
+                                                  ? Colors.red
+                                                  : Colors.orange),
                                 )
-
                               ],
                             ),
                           ),
 
                           ///Admin comment
                           (widget.order.adminComment == null)
-                              ? SizedBox()
+                              ? const SizedBox()
                               : Padding(
-                                  padding: EdgeInsets.only(top: 5),
+                                  padding: const EdgeInsets.only(top: 5),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
@@ -211,15 +212,17 @@ class _OrdersCardState extends State<OrdersCard>
                                       children: [
                                         Text(
                                           "Admin comment:",
-                                          style: themeModel.theme.textTheme.bodyText2,
+                                          style: themeModel
+                                              .theme.textTheme.bodyText2,
                                         ),
                                         Text(
                                           widget.order.adminComment!,
-                                          style: themeModel.theme.textTheme.bodyText1!.apply(
-                                            color: themeModel.secondTextColor
-                                          ),
+                                          style: themeModel
+                                              .theme.textTheme.bodyText1!
+                                              .apply(
+                                                  color: themeModel
+                                                      .secondTextColor),
                                         ),
-
                                       ],
                                     ),
                                   ),
@@ -227,9 +230,9 @@ class _OrdersCardState extends State<OrdersCard>
 
                           ///Delivery Comment
                           (widget.order.deliveryComment == null)
-                              ? SizedBox()
+                              ? const SizedBox()
                               : Padding(
-                                  padding: EdgeInsets.only(top: 5),
+                                  padding: const EdgeInsets.only(top: 5),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
@@ -238,16 +241,17 @@ class _OrdersCardState extends State<OrdersCard>
                                       children: [
                                         Text(
                                           "Delivery comment:",
-                                          style: themeModel.theme.textTheme.bodyText2,
+                                          style: themeModel
+                                              .theme.textTheme.bodyText2,
                                         ),
                                         Text(
                                           widget.order.deliveryComment!,
-                                          style: themeModel.theme.textTheme.bodyText1!.apply(
-                                              color: themeModel.secondTextColor
-                                          ),
+                                          style: themeModel
+                                              .theme.textTheme.bodyText1!
+                                              .apply(
+                                                  color: themeModel
+                                                      .secondTextColor),
                                         ),
-
-
                                       ],
                                     ),
                                   ),
@@ -255,7 +259,7 @@ class _OrdersCardState extends State<OrdersCard>
 
                           ///Payment method
                           Padding(
-                            padding: EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.only(top: 5),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Wrap(
@@ -266,11 +270,9 @@ class _OrdersCardState extends State<OrdersCard>
                                   ),
                                   Text(
                                     widget.order.paymentMethod,
-                                    style: themeModel.theme.textTheme.bodyText1!.apply(
-                                        color: themeModel.priceColor
-                                    ),
+                                    style: themeModel.theme.textTheme.bodyText1!
+                                        .apply(color: themeModel.priceColor),
                                   ),
-
                                 ],
                               ),
                             ),
@@ -278,7 +280,7 @@ class _OrdersCardState extends State<OrdersCard>
 
                           ///Delivery price
                           Padding(
-                            padding: EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.only(top: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -286,20 +288,16 @@ class _OrdersCardState extends State<OrdersCard>
                                   "Delivery:",
                                   style: themeModel.theme.textTheme.bodyText2,
                                 ),
-
-
                                 Container(
                                   alignment: Alignment.centerRight,
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
                                     widget.order.shippingMethod.price
-                                        .toString() +
+                                            .toString() +
                                         "\$",
-                                    style: themeModel.theme.textTheme.bodyText1!.apply(
-                                        color: themeModel.priceColor
-                                    ),
+                                    style: themeModel.theme.textTheme.bodyText1!
+                                        .apply(color: themeModel.priceColor),
                                   ),
-
                                 ),
                               ],
                             ),
@@ -307,80 +305,64 @@ class _OrdersCardState extends State<OrdersCard>
 
                           ///Coupon
                           (widget.order.coupon == null)
-                              ? SizedBox()
+                              ? const SizedBox()
                               : Padding(
-                                  padding: EdgeInsets.only(top: 5),
+                                  padding: const EdgeInsets.only(top: 5),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-
                                       Text(
                                         "Coupon:",
-                                        style: themeModel.theme.textTheme.bodyText2,
+                                        style: themeModel
+                                            .theme.textTheme.bodyText2,
                                       ),
-
-
                                       Container(
                                         alignment: Alignment.centerRight,
-                                        padding: EdgeInsets.only(left: 10),
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
                                         child: Text(
                                           (widget.order.coupon!.value)
-                                              .toString() +
+                                                  .toString() +
                                               ((widget.order.coupon!.type ==
-                                                  "percentage")
+                                                      "percentage")
                                                   ? "%"
                                                   : "\$"),
-                                          style: themeModel.theme.textTheme.bodyText1!.apply(
-                                              color: themeModel.priceColor
-                                          ),
+                                          style: themeModel
+                                              .theme.textTheme.bodyText1!
+                                              .apply(
+                                                  color: themeModel.priceColor),
                                         ),
-
                                       ),
-
-
                                     ],
                                   ),
                                 ),
 
                           ///Total price
                           Padding(
-                            padding: EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.only(top: 5),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-
-
-
-
                                 Text(
                                   "Total:",
                                   style: themeModel.theme.textTheme.bodyText2,
                                 ),
-
-
                                 Container(
                                   alignment: Alignment.centerRight,
-                                  padding: EdgeInsets.only(left: 10),
+                                  padding: const EdgeInsets.only(left: 10),
                                   child: Text(
                                     (widget.order.total).toString() + "\$",
-                                    style: themeModel.theme.textTheme.bodyText1!.apply(
-                                        color: themeModel.priceColor
-                                    ),
+                                    style: themeModel.theme.textTheme.bodyText1!
+                                        .apply(color: themeModel.priceColor),
                                   ),
-
                                 ),
-
-
-
-
-
                               ],
                             ),
                           )
                         ],
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
         ),

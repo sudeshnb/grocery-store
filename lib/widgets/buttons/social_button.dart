@@ -6,9 +6,12 @@ class SocialButton extends StatelessWidget {
   final Color color;
   final void Function() onPressed;
 
-  const SocialButton({required this.path,
-  required this.color,
-  required this.onPressed});
+  const SocialButton(
+      {Key? key,
+      required this.path,
+      required this.color,
+      required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,8 @@ class SocialButton extends StatelessWidget {
         path,
         height: 20,
       ),
-      padding:const EdgeInsets.all(20.0),
-      shape: CircleBorder(),
+      padding: const EdgeInsets.all(20.0),
+      shape: const CircleBorder(),
     );
   }
 }

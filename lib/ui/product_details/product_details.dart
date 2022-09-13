@@ -1,20 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/cart_bloc.dart';
 import 'package:grocery/blocs/product_details_bloc.dart';
 import 'package:grocery/models/data_models/cart_item.dart';
 import 'package:grocery/models/data_models/product.dart';
+import 'package:grocery/models/data_models/unit.dart';
 import 'package:grocery/models/state_models/select_menu_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
-import 'package:grocery/models/data_models/unit.dart';
 import 'package:grocery/services/auth.dart';
 import 'package:grocery/services/database.dart';
+import 'package:grocery/ui/home/cart/checkout/checkout.dart';
 import 'package:grocery/ui/product_details/select_menu.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
 import 'package:grocery/widgets/fade_in.dart';
 import 'package:grocery/widgets/transparent_image.dart';
-import 'package:provider/provider.dart';
-import 'package:grocery/ui/home/cart/checkout/checkout.dart';
 
 // ignore: must_be_immutable
 class ProductDetails extends StatefulWidget {
@@ -59,7 +59,11 @@ class ProductDetails extends StatefulWidget {
   final Product product;
   final ProductDetailsBloc bloc;
 
-  const ProductDetails({required this.product, required this.bloc});
+  const ProductDetails({
+    Key? key,
+    required this.product,
+    required this.bloc,
+  }) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -67,13 +71,12 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails>
     with TickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   late Stream<List<CartItem>> cartItemStream;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     final cartBloc = Provider.of<CartBloc>(context, listen: false);
@@ -88,19 +91,18 @@ class _ProductDetailsState extends State<ProductDetails>
 
     return Scaffold(
         body: ListView(
-      controller: _scrollController,
-      padding: EdgeInsets.only(bottom: 20),
+      controller: scrollController,
+      padding: const EdgeInsets.only(bottom: 20),
       children: [
         ///Product title
         AppBar(
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
-          title:Text(
-              widget.product.title,
+          title: Text(
+            widget.product.title,
             style: themeModel.theme.textTheme.headline3,
           ),
-
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
@@ -136,9 +138,9 @@ class _ProductDetailsState extends State<ProductDetails>
                             },
                           ),
                         )
-                      : SizedBox();
+                      : const SizedBox();
                 } else {
-                  return SizedBox();
+                  return const SizedBox();
                 }
               },
             ),
@@ -147,7 +149,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
         ///Product image
         Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Hero(
               tag: widget.product.reference,
               child: FadeInImage(
@@ -161,14 +163,13 @@ class _ProductDetailsState extends State<ProductDetails>
         ///Product reference
         FadeIn(
           child: Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20),
             child: Row(
               children: [
                 Text(
                   "Reference: ",
-                  style: themeModel.theme.textTheme.headline3!.apply(
-                      color: themeModel.accentColor
-                  ),
+                  style: themeModel.theme.textTheme.headline3!
+                      .apply(color: themeModel.accentColor),
                 ),
                 Text(
                   widget.product.reference,
@@ -181,7 +182,7 @@ class _ProductDetailsState extends State<ProductDetails>
 
         ///Check if product is in cart
         AnimatedSize(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           child: StreamBuilder<List<CartItem>>(
             stream: cartItemStream,
             builder: (context, snapshot) {
@@ -198,12 +199,12 @@ class _ProductDetailsState extends State<ProductDetails>
                         ? FadeIn(
                             child: SelectMenu.create(),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
 
                     ///If added show "Add to cart" else show "Added"
 
                     Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
                       child: FadeIn(
                         child: DefaultButton(
                             color: themeModel.accentColor,
@@ -218,14 +219,12 @@ class _ProductDetailsState extends State<ProductDetails>
                                   color: Colors.white,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child:Text(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Text(
                                     !addedToCart ? "Add to Cart" : "Added",
-                                    style: themeModel.theme.textTheme.headline3!.apply(
-                                      color: Colors.white
-                                    ),
+                                    style: themeModel.theme.textTheme.headline3!
+                                        .apply(color: Colors.white),
                                   ),
-
                                 )
                               ],
                             ),
@@ -234,7 +233,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                   ? widget.bloc
                                       .addToCart(widget.product.reference)
                                       .then((value) {
-                                      _scrollController.animateTo(
+                                      scrollController.animateTo(
                                         0.0,
                                         curve: Curves.easeOut,
                                         duration:
@@ -244,7 +243,7 @@ class _ProductDetailsState extends State<ProductDetails>
                                   : widget.bloc
                                       .removeFromCart(widget.product.reference)
                                       .then((value) {
-                                      _scrollController.animateTo(
+                                      scrollController.animateTo(
                                         0.0,
                                         curve: Curves.easeOut,
                                         duration:
@@ -257,77 +256,63 @@ class _ProductDetailsState extends State<ProductDetails>
                   ],
                 );
               } else {
-                return SizedBox();
+                return const SizedBox();
               }
             },
           ),
         ),
 
         FadeIn(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ///Product description
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 30),
-                child: Text(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+                  child: Text(
                     "Description",
-                  style: themeModel.theme.textTheme.headline3!.apply(
-                    color: themeModel.accentColor
-                  ),
-                )
-
-              ),
+                    style: themeModel.theme.textTheme.headline3!
+                        .apply(color: themeModel.accentColor),
+                  )),
               Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                child: Text(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Text(
                     widget.product.description,
-                  style: themeModel.theme.textTheme.bodyText1,
-                )
-              ),
+                    style: themeModel.theme.textTheme.bodyText1,
+                  )),
 
               ///Product storage description
 
               Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 30),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
                   child: Text(
                     "Storage",
-                    style: themeModel.theme.textTheme.headline3!.apply(
-                        color: themeModel.accentColor
-                    ),
-                  )
-
-              ),
+                    style: themeModel.theme.textTheme.headline3!
+                        .apply(color: themeModel.accentColor),
+                  )),
               Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                   child: Text(
                     widget.product.storage,
                     style: themeModel.theme.textTheme.bodyText1,
-                  )
-              ),
+                  )),
 
               ///Product origin description
 
               Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 30),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
                   child: Text(
                     "Origin",
-                    style: themeModel.theme.textTheme.headline3!.apply(
-                        color: themeModel.accentColor
-                    ),
-                  )
-
-              ),
+                    style: themeModel.theme.textTheme.headline3!
+                        .apply(color: themeModel.accentColor),
+                  )),
               Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
                   child: Text(
                     widget.product.origin,
                     style: themeModel.theme.textTheme.bodyText1,
-                  )
-              ),
-
-
+                  )),
             ],
           ),
         ),

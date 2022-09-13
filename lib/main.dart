@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/helpers/project_configuration.dart';
 import 'package:grocery/models/data_models/app_notification.dart';
@@ -42,9 +41,7 @@ void main() async {
   ///Show background notifications
   FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 
-  runApp(
-    MyApp(),
-  );
+  runApp(const MyApp());
 }
 
 Future<dynamic> myBackgroundMessageHandler(RemoteMessage message) async {
@@ -71,22 +68,14 @@ class MyApp extends StatelessWidget {
 
     final providers = [
       ///Auth provider
-      Provider<AuthBase>(
-        create: (context) => auth,
-      ),
+      Provider<AuthBase>(create: (context) => auth),
 
       ///Database(Firestore) provider
-      Provider<Database>(
-        create: (context) => database,
-      ),
+      Provider<Database>(create: (context) => database),
 
       ///Cart provider
       Provider<CartBloc>(
-        create: (context) => CartBloc(
-          database: database,
-          auth: auth,
-        ),
-      )
+          create: (context) => CartBloc(database: database, auth: auth))
     ];
 
     ///If we use cloud functions, add his provider
@@ -106,7 +95,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp(
               title: 'Grocery App',
               theme: themeModel.theme,
-              home: SplashScreen(),
+              home: const SplashScreen(),
             );
           },
         ),

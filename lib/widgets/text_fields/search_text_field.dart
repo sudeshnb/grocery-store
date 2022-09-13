@@ -7,27 +7,29 @@ class SearchTextField extends StatelessWidget {
   final Function(String value) onSubmitted;
   final Function(String value) onChanged;
 
-  const SearchTextField({
-   required this.textEditingController,
-    required this.onSubmitted,
-    required  this.onChanged});
+  const SearchTextField(
+      {Key? key,
+      required this.textEditingController,
+      required this.onSubmitted,
+      required this.onChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final themeModel=Provider.of<ThemeModel>(context);
+    final themeModel = Provider.of<ThemeModel>(context);
 
     return Container(
-      margin:const EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 10,
       ),
-      padding:const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
           color: themeModel.secondBackgroundColor,
-          borderRadius:const BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           boxShadow: [
             BoxShadow(
                 blurRadius: 5,
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 color: themeModel.shadowColor)
           ]),
       child: TextField(
@@ -35,7 +37,7 @@ class SearchTextField extends StatelessWidget {
         controller: textEditingController,
         onSubmitted: onSubmitted,
         onChanged: onChanged,
-        decoration:const InputDecoration(
+        decoration: const InputDecoration(
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,

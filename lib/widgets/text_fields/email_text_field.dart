@@ -15,7 +15,8 @@ class EmailTextField extends StatelessWidget {
   final bool obscureText;
 
   const EmailTextField(
-      {required this.textEditingController,
+      {Key? key,
+      required this.textEditingController,
       required this.focusNode,
       required this.textInputAction,
       required this.textInputType,
@@ -24,24 +25,21 @@ class EmailTextField extends StatelessWidget {
       required this.onSubmitted,
       required this.error,
       required this.isLoading,
-      this.obscureText = false});
+      this.obscureText = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    final themeModel=Provider.of<ThemeModel>(context);
+    final themeModel = Provider.of<ThemeModel>(context);
 
     return Container(
-      margin: EdgeInsets.only(
-        top: 10,
-      ),
-      padding:const EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       decoration: BoxDecoration(
         color: themeModel.secondBackgroundColor,
-        borderRadius:const BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         border: Border.all(
             width: 2, color: error ? Colors.red : Colors.transparent),
-
       ),
       child: TextField(
         enabled: !isLoading,
@@ -59,7 +57,8 @@ class EmailTextField extends StatelessWidget {
           enabledBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           labelText: labelText,
           icon: Icon(iconData),
         ),

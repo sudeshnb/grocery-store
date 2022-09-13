@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
-import 'package:provider/provider.dart';
 
 class SuccessDialog extends StatelessWidget {
   final String message;
 
-  const SuccessDialog({
-    required this.message
-});
+  const SuccessDialog({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +19,9 @@ class SuccessDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius:const BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
             color: themeModel.backgroundColor),
-        padding:const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Wrap(
           children: [
             Align(
@@ -35,22 +34,21 @@ class SuccessDialog extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Padding(
-                padding:const EdgeInsets.only(top: 10),
-                child:Text(message,
-                style: themeModel.theme.textTheme.headline3,
-                textAlign: TextAlign.center,)
-
-
-              ),
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    message,
+                    style: themeModel.theme.textTheme.headline3,
+                    textAlign: TextAlign.center,
+                  )),
             ),
             Align(
               alignment: Alignment.center,
               child: DefaultButton(
-                  widget:Text('OK',
-                    style: themeModel.theme.textTheme.headline3!.apply(
-                      color: Colors.white
-                    ),
-                    ),
+                  widget: Text(
+                    'OK',
+                    style: themeModel.theme.textTheme.headline3!
+                        .apply(color: Colors.white),
+                  ),
                   onPressed: () {
                     Navigator.pop(context);
                   },

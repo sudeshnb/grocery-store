@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/bottom_navigation_bar_model.dart';
 import 'package:grocery/models/state_models/home_model.dart';
-import 'package:provider/provider.dart';
 
 class BottomNavigationBarHome extends StatelessWidget {
   final BottomNavigationBarModel model;
 
-  const BottomNavigationBarHome({required this.model});
+  const BottomNavigationBarHome({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class BottomNavigationBarHome extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: false,
       showSelectedLabels: false,
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(
             Icons.home,
@@ -31,21 +35,18 @@ class BottomNavigationBarHome extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(
             Icons.search,
-
           ),
           label: "Search",
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.shopping_cart,
-
           ),
           label: "Cart",
         ),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.settings,
-
             ),
             label: "Settings"),
       ],

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/products_reader_bloc.dart';
 import 'package:grocery/models/data_models/product.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
@@ -10,13 +12,15 @@ import 'package:grocery/ui/product_details/product_details.dart';
 import 'package:grocery/widgets/cards/product_card.dart';
 import 'package:grocery/widgets/dialogs/success_dialog.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ProductReader extends StatefulWidget {
   final ProductsReaderBloc bloc;
 
-  const ProductReader({required this.bloc});
+  const ProductReader({
+    Key? key,
+    required this.bloc,
+  }) : super(key: key);
 
   static create(BuildContext context, {required String category}) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -40,11 +44,10 @@ class ProductReader extends StatefulWidget {
 }
 
 class _ProductReaderState extends State<ProductReader> {
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     widget.bloc.loadProducts(10);
   }
@@ -59,11 +62,10 @@ class _ProductReaderState extends State<ProductReader> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            widget.bloc.category.replaceFirst(
-                widget.bloc.category[0], widget.bloc.category[0].toUpperCase()),
+          widget.bloc.category.replaceFirst(
+              widget.bloc.category[0], widget.bloc.category[0].toUpperCase()),
           style: themeModel.theme.textTheme.headline3,
         ),
-
         centerTitle: true,
         backgroundColor: themeModel.secondBackgroundColor,
         leading: IconButton(
@@ -79,8 +81,8 @@ class _ProductReaderState extends State<ProductReader> {
       body: NotificationListener(
           onNotification: (ScrollNotification notification) {
             if (notification is ScrollEndNotification) {
-              if (_scrollController.position.extentAfter == 0) {
-                widget.bloc.loadProducts((width ~/ 180) *  (height ~/ 180));
+              if (scrollController.position.extentAfter == 0) {
+                widget.bloc.loadProducts((width ~/ 180) * (height ~/ 180));
               }
             }
             return false;
@@ -92,7 +94,7 @@ class _ProductReaderState extends State<ProductReader> {
                 widget.bloc.savedProducts = snapshot.data!;
                 List<Product> products = snapshot.data!;
 
-                if (snapshot.data!.length == 0) {
+                if (snapshot.data!.isEmpty) {
                   ///If no product
                   return Center(
                     child: FadeIn(
@@ -106,15 +108,13 @@ class _ProductReaderState extends State<ProductReader> {
                             fit: BoxFit.cover,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: Text(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Text(
                                 'Nothing found!',
-                              style: themeModel.theme.textTheme.headline3!.apply(
-                                color: themeModel.accentColor
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          )
+                                style: themeModel.theme.textTheme.headline3!
+                                    .apply(color: themeModel.accentColor),
+                                textAlign: TextAlign.center,
+                              ))
                         ],
                       ),
                     ),
@@ -122,37 +122,36 @@ class _ProductReaderState extends State<ProductReader> {
                 } else {
                   ///If there are products
                   return GridView.builder(
-                    controller: _scrollController,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: width ~/ 180),
-                    physics:const AlwaysScrollableScrollPhysics(),
-                    padding:const EdgeInsets.only(
+                    controller: scrollController,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: width ~/ 180),
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(
                       top: 10,
                       left: 16,
                       right: 16,
                     ),
-                    itemBuilder: (context,position){
+                    itemBuilder: (context, position) {
                       return FadeIn(
                           child: ProductCard(
-                            product: products[position],
-                            onTap: () {
-                              ProductDetails.create(context, products[position])
-                                  .then((value) {
-                                if (value != null) {
-                                  Navigator.pop(context);
-                                  showDialog(
+                        product: products[position],
+                        onTap: () {
+                          ProductDetails.create(context, products[position])
+                              .then((value) {
+                            if (value != null) {
+                              Navigator.pop(context);
+                              showDialog(
                                       context: context,
-                                      builder: (context) => const SuccessDialog(message: "Congratulations!\nYour order is placed!")
-
-                                  ).then((value) {
-                                    widget.bloc.removeCart();
-                                  });
-                                }
+                                      builder: (context) => const SuccessDialog(
+                                          message:
+                                              "Congratulations!\nYour order is placed!"))
+                                  .then((value) {
+                                widget.bloc.removeCart();
                               });
-                            },
-                          )
-
-
-                      );
+                            }
+                          });
+                        },
+                      ));
                     },
                     itemCount: snapshot.data!.length,
                   );
@@ -170,7 +169,7 @@ class _ProductReaderState extends State<ProductReader> {
                 );
               } else {
                 ///If loading
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }

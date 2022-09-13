@@ -53,6 +53,7 @@ abstract class Database {
 class FirestoreDatabase implements Database {
   final _service = FirebaseFirestore.instance;
 
+  @override
   Future<QuerySnapshot> getFutureCollectionWithRangeAndSearch(String path,
       {required String orderBy,
       required DocumentSnapshot? startAfter,
@@ -78,100 +79,78 @@ class FirestoreDatabase implements Database {
     }
   }
 
+  @override
   Future<QuerySnapshot> getFutureCollectionWithRangeAndValue(String path,
       {required String orderBy,
       required DocumentSnapshot? startAfter,
       required int length,
       required String key,
       required String value}) async {
-
-
     late QuerySnapshot result;
-    bool fromCache=false;
+    bool fromCache = false;
 
-    final storage=GetStorage();
+    final storage = GetStorage();
 
-    if(storage.hasData(value+(startAfter==null? "" : startAfter.id))){
-      fromCache=true;
-    }else{
-      await storage.write(value+(startAfter==null? "" : startAfter.id),true);
+    if (storage.hasData(value + (startAfter == null ? "" : startAfter.id))) {
+      fromCache = true;
+    } else {
+      await storage.write(
+          value + (startAfter == null ? "" : startAfter.id), true);
     }
 
-
-
-
-
     if (startAfter != null) {
-
-
-
-      result= await _service
+      result = await _service
           .collection(path)
           .where(key, isEqualTo: value)
           .orderBy(orderBy)
           .startAfterDocument(startAfter)
           .limit(length)
-          .get(GetOptions(source: fromCache ? Source.cache: Source.serverAndCache));
-
-
-
-
-
+          .get(GetOptions(
+              source: fromCache ? Source.cache : Source.serverAndCache));
     } else {
-      result=  await _service
+      result = await _service
           .collection(path)
           .where(key, isEqualTo: value)
           .orderBy(orderBy)
           .limit(length)
-          .get(GetOptions(source: fromCache ? Source.cache: Source.serverAndCache));
-
-
+          .get(GetOptions(
+              source: fromCache ? Source.cache : Source.serverAndCache));
     }
 
-    await Future.forEach<DocumentSnapshot>(result.docs, (element){
-      print("From Cache: "+element.metadata.isFromCache.toString());
-
+    await Future.forEach<DocumentSnapshot>(result.docs, (element) {
+      // print("From Cache: " + element.metadata.isFromCache.toString());
     });
-
-
 
     return result;
   }
 
+  @override
   Future<QuerySnapshot> getFutureDataFromCollectionWithRange(String path,
       {required String orderBy,
       required DocumentSnapshot? startAfter,
       required int length}) async {
     late QuerySnapshot result;
     if (startAfter != null) {
-
-        result = await _service
-            .collection(path)
-            .orderBy(orderBy)
-            .startAfterDocument(startAfter)
-            .limit(length)
-            .get();
-
+      result = await _service
+          .collection(path)
+          .orderBy(orderBy)
+          .startAfterDocument(startAfter)
+          .limit(length)
+          .get();
     } else {
-
-        result = await _service
-            .collection(path)
-            .orderBy(orderBy)
-            .limit(length)
-            .get();
-
+      result =
+          await _service.collection(path).orderBy(orderBy).limit(length).get();
     }
-
-
-
 
     return result;
   }
 
+  @override
   Future<DocumentSnapshot> getFutureDataFromDocument(String path) {
     return _service.doc(path).get();
   }
 
+  @override
   Stream<QuerySnapshot> getDataFromCollection(String path, [int? length]) {
     if (length != null) {
       final snapshots = _service.collection(path).limit(length).snapshots();
@@ -184,12 +163,14 @@ class FirestoreDatabase implements Database {
     }
   }
 
+  @override
   Stream<DocumentSnapshot> getDataFromDocument(String path) {
     final snapshots = _service.doc(path).snapshots();
 
     return snapshots;
   }
 
+  @override
   Stream<QuerySnapshot> getDataWithArrayCondition(
       String collection, List<String> array) {
     final snapshots = _service
@@ -200,6 +181,7 @@ class FirestoreDatabase implements Database {
     return snapshots;
   }
 
+  @override
   Stream<QuerySnapshot> getLimitedDataWithValueCondition(
       String collection, String key, String value, int length) {
     final snapshots = _service
@@ -211,6 +193,7 @@ class FirestoreDatabase implements Database {
     return snapshots;
   }
 
+  @override
   Stream<QuerySnapshot> getDataWithValueCondition(
       String collection, String key, String value) {
     final snapshots = _service
@@ -221,10 +204,12 @@ class FirestoreDatabase implements Database {
     return snapshots;
   }
 
+  @override
   Stream<QuerySnapshot> getSearchedDataFromCollection(
       String collection, String searchedData,
       [int? length]) {
-    final snapshots;
+    // TODO
+    final Stream<QuerySnapshot<Map<String, dynamic>>> snapshots;
     if (length != null) {
       snapshots = _service
           .collection(collection)
@@ -245,21 +230,25 @@ class FirestoreDatabase implements Database {
     }
   }
 
+  @override
   Future<void> setData(Map<String, dynamic> data, String path) async {
     final snapshots = _service.doc(path);
     await snapshots.set(data);
   }
 
+  @override
   Future<void> updateData(Map<String, dynamic> data, String path) async {
     final snapshots = _service.doc(path);
     await snapshots.update(data);
   }
 
+  @override
   Future<void> removeData(String path) async {
     final snapshots = _service.doc(path);
     await snapshots.delete();
   }
 
+  @override
   Future<void> removeCollection(String path) async {
     await _service.collection(path).get().then((snapshot) async {
       await Future.forEach<DocumentSnapshot>(snapshot.docs, (doc) async {

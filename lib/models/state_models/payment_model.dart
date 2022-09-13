@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery/helpers/project_configuration.dart';
@@ -15,7 +13,6 @@ import 'package:grocery/services/stripe_payment.dart';
 import 'package:grocery/models/data_models/shipping_method.dart' as p;
 import 'package:grocery/widgets/dialogs/error_dialog.dart';
 import 'package:decimal/decimal.dart';
-
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -59,12 +56,11 @@ class PaymentModel with ChangeNotifier {
         num total = checkoutModel.getDiscountedTotal();
 
         ///Payment process
-        String paymentReference = await StripeService.payWithCard(context,
+        String paymentReference = await StripeService.payWithCard(
+            context,
             ((Decimal.parse(total.toString())) * Decimal.parse('100'))
                 .toString());
 
-
-        print(paymentReference);
         await _submitOrder(context,
             address: address,
             shippingMethod: shippingMethod,
@@ -77,8 +73,7 @@ class PaymentModel with ChangeNotifier {
           if (e.message != 'cancelled') {
             showDialog(
                 context: context,
-                builder: (context) =>
-                    ErrorDialog(message: e.message!));
+                builder: (context) => ErrorDialog(message: e.message!));
           }
         }
       } finally {
@@ -97,19 +92,14 @@ class PaymentModel with ChangeNotifier {
     String? paymentReference,
     Coupon? coupon,
   }) async {
-
-
-
     late bool result;
 
-    if(ProjectConfiguration.useCloudFunctions){
-
-
+    if (ProjectConfiguration.useCloudFunctions) {
       List<Map> cartItemsMap = cartItems.map((cartItem) {
         return {
           "id": cartItem.reference,
           "quantity": cartItem.quantity,
-          "unit":cartItem.unit,
+          "unit": cartItem.unit,
         };
       }).toList();
 
@@ -135,16 +125,12 @@ class PaymentModel with ChangeNotifier {
         body['coupon_id'] = coupon.code;
       }
 
+      final cloudFunctions =
+          Provider.of<CloudFunctions>(context, listen: false);
 
-
-
-      final cloudFunctions=Provider.of<CloudFunctions>(context,listen: false);
-
-
-      result=await cloudFunctions.addOrder(body);
-
-    }else{
-      result=false;
+      result = await cloudFunctions.addOrder(body);
+    } else {
+      result = false;
 
       DateTime dateTime = DateTime.now();
       String id = dateTime.day.toString() +
@@ -161,12 +147,12 @@ class PaymentModel with ChangeNotifier {
           "title": cartItem.product!.title,
           "quantity": cartItem.quantity.toString() + " " + cartItem.unit,
           "price": (Decimal.parse(((cartItem.unit == 'Piece')
-              ? cartItem.product!.pricePerPiece
-              : (cartItem.unit == 'KG')
-              ? cartItem.product!.pricePerKg
-              : cartItem.product!.pricePerKg! * 0.001)
-              .toString()) *
-              Decimal.parse(cartItem.quantity.toString()))
+                          ? cartItem.product!.pricePerPiece
+                          : (cartItem.unit == 'KG')
+                              ? cartItem.product!.pricePerKg
+                              : cartItem.product!.pricePerKg! * 0.001)
+                      .toString()) *
+                  Decimal.parse(cartItem.quantity.toString()))
               .toString(),
         };
       }).toList();
@@ -194,7 +180,8 @@ class PaymentModel with ChangeNotifier {
           "title": shippingMethod.title,
           "price": shippingMethod.price.toString(),
         },
-        "payment_method": paymentReference==null ?"Cash in delivery" :"Credit card",
+        "payment_method":
+            paymentReference == null ? "Cash in delivery" : "Credit card",
         "shipping_address": {
           "name": address.name,
           "address": address.address,
@@ -226,35 +213,21 @@ class PaymentModel with ChangeNotifier {
 
       await _sendNotification("Order nº$id is placed", id);
 
-      result=true;
-
-
+      result = true;
     }
 
-
-
-
-
-
-
-    if(result == true){
+    if (result == true) {
       Navigator.pop(context, true);
 
-   //   print(request.data is Map<String,dynamic>);
-  //    return request.data;
+      //   print(request.data is Map<String,dynamic>);
+      //    return request.data;
 
-
-    }else{
-      showDialog(context: context, builder: (context)=>
-          ErrorDialog(message: "Can't submit order, try again later"));
-
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => const ErrorDialog(
+              message: "Can't submit order, try again later"));
     }
-
-
-
-
-
-
   }
 
   ///Send notification to admin
@@ -265,15 +238,13 @@ class PaymentModel with ChangeNotifier {
       final body = {
         "message": msg,
         "title": "New order!",
-        "token":token,
+        "token": token,
       };
 
       try {
         await http.post(Uri.parse(ProjectConfiguration.notificationsApi),
             body: json.encode(body));
-      } catch (e) {
-        print(e);
-      }
+      } catch (_) {}
     }
   }
 
@@ -281,7 +252,7 @@ class PaymentModel with ChangeNotifier {
   Future<String?> _getToken() async {
     try {
       final snapshot =
-      await database.getFutureDataFromDocument("admin/notifications");
+          await database.getFutureDataFromDocument("admin/notifications");
       Map data = snapshot.data() as Map;
 
       return data['token'];
@@ -290,5 +261,3 @@ class PaymentModel with ChangeNotifier {
     }
   }
 }
-
-

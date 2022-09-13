@@ -1,22 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/helpers/project_configuration.dart';
 import 'package:grocery/models/state_models/sign_in_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/services/auth.dart';
+import 'package:grocery/services/database.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
 import 'package:grocery/widgets/buttons/social_button.dart';
 import 'package:grocery/widgets/fade_in.dart';
 import 'package:grocery/widgets/text_fields/email_text_field.dart';
 import 'package:grocery/widgets/transparent_image.dart';
-import 'package:provider/provider.dart';
-import 'package:grocery/services/database.dart';
 
 class SignIn extends StatefulWidget {
   final SignInModel model;
 
-  const SignIn({required this.model});
+  const SignIn({Key? key, required this.model}) : super(key: key);
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -71,15 +70,16 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
     return Center(
         child: NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overscroll) {
-        overscroll.disallowGlow();
+        overscroll.disallowIndicator();
         return true;
       },
       child: ListView(
         shrinkWrap: true,
-        padding:const EdgeInsets.all(20),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(20),
         children: <Widget>[
           Padding(
-            padding:const EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(bottom: 20),
             child: FadeInImage(
               image: AssetImage(ProjectConfiguration.logo),
               placeholder: MemoryImage(kTransparentImage),
@@ -90,9 +90,9 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
 
           ///Full name field
           AnimatedSize(
-            duration:const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: widget.model.isSignedIn
-                ? SizedBox()
+                ? const SizedBox()
                 : EmailTextField(
                     isLoading: widget.model.isLoading,
                     textEditingController: fullNameController,
@@ -108,20 +108,15 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
           ),
 
           AnimatedSize(
-            duration:const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: (!widget.model.validName && !widget.model.isSignedIn)
                 ? FadeIn(
-                    child:
-                        Text(
-                            "Please enter a valid name",
-                          style: themeModel.theme.textTheme.subtitle2!.apply(
-                              color: Colors.red
-                          ),
-                        )
-
-
-                  )
-                : SizedBox(),
+                    child: Text(
+                    "Please enter a valid name",
+                    style: themeModel.theme.textTheme.subtitle2!
+                        .apply(color: Colors.red),
+                  ))
+                : const SizedBox(),
           ),
 
           ///Email field
@@ -138,20 +133,15 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
               },
               error: !widget.model.validEmail),
           AnimatedSize(
-            duration:const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: (!widget.model.validEmail)
                 ? FadeIn(
-                    child:
-                    Text(
-                      "Please enter a valid email",
-                      style: themeModel.theme.textTheme.subtitle2!.apply(
-                          color: Colors.red
-                      ),
-                    )
-
-
-                  )
-                : SizedBox(),
+                    child: Text(
+                    "Please enter a valid email",
+                    style: themeModel.theme.textTheme.subtitle2!
+                        .apply(color: Colors.red),
+                  ))
+                : const SizedBox(),
           ),
 
           ///Password field
@@ -173,42 +163,36 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
               },
               error: !widget.model.validPassword),
           AnimatedSize(
-            duration:const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: (!widget.model.validPassword)
                 ? FadeIn(
-                    child:Text(
-                      'Please enter a valid password : don\'t forget numbers, special characters(@, # ...), capital letters',
-                      style: themeModel.theme.textTheme.subtitle2!.apply(
-                          color: Colors.red
-                      ),
-                    )
-                  )
-                : SizedBox(),
+                    child: Text(
+                    'Please enter a valid password : don\'t forget numbers, special characters(@, # ...), capital letters',
+                    style: themeModel.theme.textTheme.subtitle2!
+                        .apply(color: Colors.red),
+                  ))
+                : const SizedBox(),
           ),
 
           ///Sign in button / Loading
           AnimatedSize(
-            duration:const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: widget.model.isLoading
-                ? Align(
+                ? const Align(
                     alignment: Alignment.center,
                     child: Padding(
-                      padding:const EdgeInsets.only(top: 20),
-                      child:const CircularProgressIndicator(),
+                      padding: EdgeInsets.only(top: 20),
+                      child: CircularProgressIndicator(),
                     ),
                   )
                 : DefaultButton(
                     color: themeModel.accentColor,
                     widget: Text(
-                        widget.model.isSignedIn
-                            ? "SIGN IN"
-                            : "CREATE AN ACCOUNT",
+                      widget.model.isSignedIn ? "SIGN IN" : "CREATE AN ACCOUNT",
                       style: themeModel.theme.textTheme.headline3!.apply(
                         color: Colors.white,
                       ),
                     ),
-
-
                     onPressed: widget.model.isSignedIn
                         ? () {
                             widget.model.signInWithEmail(context,
@@ -226,19 +210,19 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
 
           ///Social Media buttons
           Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                 Spacer(),
+                const Spacer(),
                 SocialButton(
                     path: "images/sign_in/facebook.svg",
-                    color: Color(0xFF3b5998),
+                    color: const Color(0xFF3b5998),
                     onPressed: !widget.model.isLoading
                         ? () {
                             widget.model.signInWithFacebook(context);
                           }
                         : () {}),
-                 Spacer(),
+                const Spacer(),
                 SocialButton(
                     path: "images/sign_in/google.svg",
                     color: Colors.white,
@@ -247,7 +231,7 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
                             widget.model.signInWithGoogle(context);
                           }
                         : () {}),
-                 Spacer(),
+                const Spacer(),
               ],
             ),
           ),
@@ -256,27 +240,24 @@ class _SignInState extends State<SignIn> with TickerProviderStateMixin<SignIn> {
           Align(
             alignment: Alignment.center,
             child: Padding(
-                padding:const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: GestureDetector(
-                  onTap: !widget.model.isLoading
-                      ? () {
-                          //Clear textFields data if switching to create account or signIn
-                          widget.model.changeSignStatus();
+                    onTap: !widget.model.isLoading
+                        ? () {
+                            //Clear textFields data if switching to create account or signIn
+                            widget.model.changeSignStatus();
 
-                          fullNameController.clear();
-                          emailController.clear();
-                          passwordController.clear();
-                          fullNameFocus.unfocus();
-                          emailFocus.unfocus();
-                          passwordFocus.unfocus();
-                        }
-                      : null,
-                  child: Text(
-                      widget.model.isSignedIn ? "Create Account" : "Sign In",
-                    style: themeModel.theme.textTheme.headline3
-                  )
-
-                )),
+                            fullNameController.clear();
+                            emailController.clear();
+                            passwordController.clear();
+                            fullNameFocus.unfocus();
+                            emailFocus.unfocus();
+                            passwordFocus.unfocus();
+                          }
+                        : null,
+                    child: Text(
+                        widget.model.isSignedIn ? "Create Account" : "Sign In",
+                        style: themeModel.theme.textTheme.headline3))),
           ),
         ],
       ),

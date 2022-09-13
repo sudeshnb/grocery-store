@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/models/state_models/update_info_model.dart';
 import 'package:grocery/services/auth.dart';
@@ -7,12 +8,14 @@ import 'package:grocery/ui/home/settings/change_password.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
 import 'package:grocery/widgets/fade_in.dart';
 import 'package:grocery/widgets/text_fields/email_text_field.dart';
-import 'package:provider/provider.dart';
 
 class UpdateInfo extends StatefulWidget {
   final UpdateInfoModel model;
 
-  const UpdateInfo({required this.model});
+  const UpdateInfo({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   static Future<bool?> create(BuildContext context) async {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -20,19 +23,19 @@ class UpdateInfo extends StatefulWidget {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
-        builder: (context) => Padding(padding: MediaQuery.of(context).viewInsets,
-
-        child: ChangeNotifierProvider<UpdateInfoModel>(
-          create: (context) => UpdateInfoModel(auth: auth),
-          child: Consumer<UpdateInfoModel>(
-            builder: (context, model, _) {
-              return UpdateInfo(
-                model: model,
-              );
-            },
-          ),
-        ),
-        ));
+        builder: (context) => Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: ChangeNotifierProvider<UpdateInfoModel>(
+                create: (context) => UpdateInfoModel(auth: auth),
+                child: Consumer<UpdateInfoModel>(
+                  builder: (context, model, _) {
+                    return UpdateInfo(
+                      model: model,
+                    );
+                  },
+                ),
+              ),
+            ));
   }
 
   @override
@@ -67,75 +70,70 @@ class _UpdateInfoState extends State<UpdateInfo> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
     return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 10, bottom: 20, left: 20, right: 20),
       decoration: BoxDecoration(
           color: themeModel.backgroundColor,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           boxShadow: [
             BoxShadow(
                 blurRadius: 30,
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 color: themeModel.shadowColor)
           ]),
       child: Wrap(
         children: [
           ///Full name field
           EmailTextField(
-              textEditingController: fullNameController,
-              focusNode: fullNameFocus,
-              textInputAction: TextInputAction.next,
-              textInputType: TextInputType.text,
-              labelText: 'Full name',
-              iconData: Icons.person_outline,
-              onSubmitted: (value) {},
-              error: !widget.model.validName,
-              isLoading: widget.model.isLoading,
-              ),
+            textEditingController: fullNameController,
+            focusNode: fullNameFocus,
+            textInputAction: TextInputAction.next,
+            textInputType: TextInputType.text,
+            labelText: 'Full name',
+            iconData: Icons.person_outline,
+            onSubmitted: (value) {},
+            error: !widget.model.validName,
+            isLoading: widget.model.isLoading,
+          ),
 
           AnimatedSize(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: (!widget.model.validName)
                 ? FadeIn(
                     child: Text(
-                        "Please enter a valid name",
-                      style: themeModel.theme.textTheme.subtitle2!.apply(
-                        color: Colors.red
-                      ),
-                    )
-
-                  )
-                : SizedBox(),
+                    "Please enter a valid name",
+                    style: themeModel.theme.textTheme.subtitle2!
+                        .apply(color: Colors.red),
+                  ))
+                : const SizedBox(),
           ),
 
           ///Email field
           EmailTextField(
-              textEditingController: emailController,
-              focusNode: emailFocus,
-              textInputAction: TextInputAction.next,
-              textInputType: TextInputType.emailAddress,
-              labelText: 'Email',
-              iconData: Icons.email_outlined,
-              onSubmitted: (value) {
-                widget.model.submit(
-                    context, fullNameController.text, emailController.text);
-              },
-              error: !widget.model.validEmail,
-              isLoading: widget.model.isLoading,
-              ),
+            textEditingController: emailController,
+            focusNode: emailFocus,
+            textInputAction: TextInputAction.next,
+            textInputType: TextInputType.emailAddress,
+            labelText: 'Email',
+            iconData: Icons.email_outlined,
+            onSubmitted: (value) {
+              widget.model.submit(
+                  context, fullNameController.text, emailController.text);
+            },
+            error: !widget.model.validEmail,
+            isLoading: widget.model.isLoading,
+          ),
 
           AnimatedSize(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: (!widget.model.validEmail)
                 ? FadeIn(
                     child: Text(
-                      "Please enter a valid email",
-                      style: themeModel.theme.textTheme.subtitle2!.apply(
-                          color: Colors.red
-                      ),
-                    )
-                  )
-                : SizedBox(),
+                    "Please enter a valid email",
+                    style: themeModel.theme.textTheme.subtitle2!
+                        .apply(color: Colors.red),
+                  ))
+                : const SizedBox(),
           ),
 
           ///Go to change password
@@ -150,33 +148,28 @@ class _UpdateInfoState extends State<UpdateInfo> with TickerProviderStateMixin {
                       ChangePassword.create(context);
                     },
               child: Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: Text(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Text(
                     'Change password?',
-                  style: themeModel.theme.textTheme.bodyText2!.apply(
-                    color: themeModel.accentColor
-                  ),
-                )
-              ),
+                    style: themeModel.theme.textTheme.bodyText2!
+                        .apply(color: themeModel.accentColor),
+                  )),
             ),
           ),
 
           /// Submit button <--> Loading indicator
           widget.model.isLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : Container(
+              : SizedBox(
                   width: double.infinity,
                   child: DefaultButton(
                       widget: Text(
-                          'Update',
-                        style: themeModel.theme.textTheme.headline3!.apply(
-                          color: Colors.white
-                        ),
+                        'Update',
+                        style: themeModel.theme.textTheme.headline3!
+                            .apply(color: Colors.white),
                       ),
-
-
                       onPressed: () {
                         widget.model.submit(context, fullNameController.text,
                             emailController.text);

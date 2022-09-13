@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/models/state_models/upload_image_model.dart';
 import 'package:grocery/services/auth.dart';
 import 'package:grocery/widgets/transparent_image.dart';
-import 'package:provider/provider.dart';
 
 class UploadImage extends StatelessWidget {
   final UploadImageModel model;
 
-  const UploadImage({required this.model});
+  const UploadImage({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   static Future<bool?> create(BuildContext context) async {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -28,15 +32,15 @@ class UploadImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeModel = Provider.of<ThemeModel>(context);
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
           color: themeModel.secondBackgroundColor,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           boxShadow: [
             BoxShadow(
                 blurRadius: 30,
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 color: themeModel.shadowColor)
           ]),
       child: Wrap(
@@ -45,10 +49,9 @@ class UploadImage extends StatelessWidget {
           (model.profileImage != null)
               ? ListTile(
                   title: Text(
-                      'View image',
+                    'View image',
                     style: themeModel.theme.textTheme.bodyText1,
                   ),
-
                   leading: Icon(
                     Icons.image,
                     color: themeModel.textColor,
@@ -72,22 +75,20 @@ class UploadImage extends StatelessWidget {
                         });
                   },
                 )
-              : SizedBox(),
+              : const SizedBox(),
 
           ///Upload a new image
           ListTile(
             title: Text(
-                'Upload a new image',
+              'Upload a new image',
               style: themeModel.theme.textTheme.bodyText1,
             ),
-
-
             leading: Icon(
               Icons.edit,
               color: themeModel.textColor,
             ),
             trailing: model.isLoading
-                ? SizedBox(
+                ? const SizedBox(
                     width: 15,
                     height: 15,
                     child: CircularProgressIndicator(),

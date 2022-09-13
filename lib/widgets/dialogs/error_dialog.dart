@@ -1,16 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
-import 'package:provider/provider.dart';
 
 class ErrorDialog extends StatelessWidget {
   final String message;
-  const ErrorDialog({
-
-    required this.message
-});
+  const ErrorDialog({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +18,9 @@ class ErrorDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius:const BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
             color: themeModel.backgroundColor),
-        padding:const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Wrap(
           children: [
             Align(
@@ -34,20 +31,22 @@ class ErrorDialog extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: Align(
                   alignment: Alignment.center,
-                  child: Text(message,
+                  child: Text(
+                    message,
                     style: themeModel.theme.textTheme.headline3,
-                    textAlign: TextAlign.center,)),
+                    textAlign: TextAlign.center,
+                  )),
             ),
             Align(
               alignment: Alignment.center,
               child: DefaultButton(
-                  widget: Text('OK',
-                    style: themeModel.theme.textTheme.headline3!.apply(
-                        color: Colors.white
-                    ),
+                  widget: Text(
+                    'OK',
+                    style: themeModel.theme.textTheme.headline3!
+                        .apply(color: Colors.white),
                   ),
                   onPressed: () {
                     Navigator.pop(context);

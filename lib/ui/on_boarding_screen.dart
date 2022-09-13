@@ -7,7 +7,7 @@ import 'package:grocery/widgets/fade_in.dart';
 import 'package:provider/provider.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen();
+  const OnBoardingScreen({Key? key}) : super(key: key);
 
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
@@ -27,14 +27,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     List<Widget> screens = [
       ///First page
       Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         color: themeModel.backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     color: themeModel.secondBackgroundColor,
                     borderRadius:
@@ -44,7 +44,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   height: height * 0.4,
                 )),
             Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Text(
                   'Quickly search and add\nhealthy foods to your cart!',
                   style: themeModel.theme.textTheme.headline3!
@@ -57,14 +57,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
 
       ///Second Page
       Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         color: themeModel.backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   color: themeModel.secondBackgroundColor,
                   borderRadius:
@@ -75,7 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               ),
             ),
             Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Text(
                   'Super fast delivery\n within two hours!',
                   style: themeModel.theme.textTheme.headline3!
@@ -88,14 +88,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
 
       ///Third page
       Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         color: themeModel.backgroundColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                     color: themeModel.secondBackgroundColor,
                     borderRadius:
@@ -105,7 +105,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                   height: height * 0.4,
                 )),
             Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Text(
                   'Easy payment in delivery!',
                   style: themeModel.theme.textTheme.headline3!
@@ -135,10 +135,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                   color: themeModel.backgroundColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   )),
@@ -147,39 +147,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     height: 10,
-                    margin: EdgeInsets.only(right: 10, left: 10),
+                    margin: const EdgeInsets.only(right: 10, left: 10),
                     width: (pageIndex == 0) ? 20 : 10,
                     decoration: BoxDecoration(
                       color: (pageIndex == 0)
                           ? themeModel.accentColor
                           : themeModel.secondTextColor,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     height: 10,
-                    margin: EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 10),
                     width: (pageIndex == 1) ? 20 : 10,
                     decoration: BoxDecoration(
                       color: (pageIndex == 1)
                           ? themeModel.accentColor
                           : themeModel.secondTextColor,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     height: 10,
-                    margin: EdgeInsets.only(right: 10),
+                    margin: const EdgeInsets.only(right: 10),
                     width: (pageIndex == 2) ? 20 : 10,
                     decoration: BoxDecoration(
                       color: (pageIndex == 2)
                           ? themeModel.accentColor
                           : themeModel.secondTextColor,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
                 ],
@@ -188,20 +188,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             Expanded(
                 child: Center(
               child: AnimatedSize(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 child: (pageIndex == 2)
-                    ? Container(
+                    ? SizedBox(
                         width: double.infinity,
                         child: DefaultButton(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             widget: Text(
-                                'Get Started',
-                              style: themeModel.theme.textTheme.headline3!.apply(
-                                color: Colors.white
-                              ),
+                              'Get Started',
+                              style: themeModel.theme.textTheme.headline3!
+                                  .apply(color: Colors.white),
                             ),
-
-
                             onPressed: () {
                               Landing.create(context);
                             },
@@ -213,14 +210,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                         },
                         child: Container(
                           color: Colors.transparent,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: FadeIn(
-                            duration: Duration(milliseconds: 300),
-                            child: Text(
+                              duration: const Duration(milliseconds: 300),
+                              child: Text(
                                 'Skip',
-                              style: themeModel.theme.textTheme.headline3,
-                            )
-                          ),
+                                style: themeModel.theme.textTheme.headline3,
+                              )),
                         ),
                       ),
               ),

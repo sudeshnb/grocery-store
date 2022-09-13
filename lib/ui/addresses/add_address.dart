@@ -2,21 +2,26 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:country_code_picker/country_codes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery/models/state_models/add_address_model.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/models/data_models/address.dart';
+import 'package:grocery/models/state_models/add_address_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/services/auth.dart';
 import 'package:grocery/services/database.dart';
 import 'package:grocery/widgets/buttons/default_button.dart';
 import 'package:grocery/widgets/fade_in.dart';
 import 'package:grocery/widgets/text_fields/address_text_field.dart';
-import 'package:provider/provider.dart';
 
 class AddAddress extends StatefulWidget {
   final AddAddressModel model;
   final Address? address;
 
-  AddAddress({required this.model, this.address});
+  const AddAddress({
+    Key? key,
+    required this.model,
+    this.address,
+  }) : super(key: key);
 
   static void create(BuildContext context, {Address? address}) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -131,7 +136,7 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         children: [
           ///Full name field
           AddressTextField(
@@ -146,9 +151,9 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
                 _fieldFocusChange(context, nameFocus, addressFocus);
               }),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validName)
                   ? FadeIn(
                       child: Text(
@@ -156,7 +161,7 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
                       style: themeModel.theme.textTheme.subtitle2!
                           .apply(color: Colors.red),
                     ))
-                  : SizedBox(),
+                  : const SizedBox(),
             ),
           ),
 
@@ -173,19 +178,17 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
                 _fieldFocusChange(context, addressFocus, cityFocus);
               }),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validAddress)
                   ? FadeIn(
                       child: Text(
-                        "Please enter a valid address",
-                        style: themeModel.theme.textTheme.subtitle2!
-                            .apply(color: Colors.red),
-                      )
-
-                    )
-                  : SizedBox(),
+                      "Please enter a valid address",
+                      style: themeModel.theme.textTheme.subtitle2!
+                          .apply(color: Colors.red),
+                    ))
+                  : const SizedBox(),
             ),
           ),
 
@@ -202,19 +205,17 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
                 _fieldFocusChange(context, cityFocus, stateFocus);
               }),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validCity)
                   ? FadeIn(
                       child: Text(
-                        "Please enter a valid city",
-                        style: themeModel.theme.textTheme.subtitle2!
-                            .apply(color: Colors.red),
-                      )
-
-                    )
-                  : SizedBox(),
+                      "Please enter a valid city",
+                      style: themeModel.theme.textTheme.subtitle2!
+                          .apply(color: Colors.red),
+                    ))
+                  : const SizedBox(),
             ),
           ),
 
@@ -232,19 +233,17 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
               }),
 
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validState)
                   ? FadeIn(
                       child: Text(
-                        "Please enter a valid state",
-                        style: themeModel.theme.textTheme.subtitle2!
-                            .apply(color: Colors.red),
-                      )
-
-                    )
-                  : SizedBox(),
+                      "Please enter a valid state",
+                      style: themeModel.theme.textTheme.subtitle2!
+                          .apply(color: Colors.red),
+                    ))
+                  : const SizedBox(),
             ),
           ),
 
@@ -262,33 +261,31 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
               }),
 
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validZip)
                   ? FadeIn(
-                      child:  Text(
-                        "Please enter a valid zip code",
-                        style: themeModel.theme.textTheme.subtitle2!
-                            .apply(color: Colors.red),
-                      )
-
-                    )
-                  : SizedBox(),
+                      child: Text(
+                      "Please enter a valid zip code",
+                      style: themeModel.theme.textTheme.subtitle2!
+                          .apply(color: Colors.red),
+                    ))
+                  : const SizedBox(),
             ),
           ),
 
           ///Country field
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               color: themeModel.secondBackgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: CountryCodePicker(
                 initialSelection: 'US',
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 dialogBackgroundColor: themeModel.backgroundColor,
                 barrierColor: themeModel.shadowColor,
                 showOnlyCountryWhenClosed: true,
@@ -299,23 +296,21 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
           Container(
             decoration: BoxDecoration(
                 color: themeModel.secondBackgroundColor,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 border: Border.all(
                     color: (!widget.model.validPhone)
                         ? Colors.red
                         : themeModel.secondBackgroundColor,
                     width: 2)),
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
                       widget.model.country.dialCode!,
-                    style: themeModel.theme.textTheme.bodyText1,
-                  )
-
-                ),
+                      style: themeModel.theme.textTheme.bodyText1,
+                    )),
                 Expanded(
                   child: TextField(
                     enabled: !widget.model.isLoading,
@@ -338,7 +333,7 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
                             : null,
                       );
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -355,43 +350,39 @@ class _AddAddressState extends State<AddAddress> with TickerProviderStateMixin {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 10),
             child: AnimatedSize(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               child: (!widget.model.validPhone)
                   ? FadeIn(
                       child: Text(
-                        "Please enter a valid phone",
-                        style: themeModel.theme.textTheme.subtitle2!
-                            .apply(color: Colors.red),
-                      )
-
-                    )
-                  : SizedBox(),
+                      "Please enter a valid phone",
+                      style: themeModel.theme.textTheme.subtitle2!
+                          .apply(color: Colors.red),
+                    ))
+                  : const SizedBox(),
             ),
           ),
 
           (widget.model.isLoading)
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : DefaultButton(
                   widget: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.save_outlined,
                         color: Colors.white,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
                             (widget.address != null) ? 'Update' : 'Save',
-                          style: themeModel.theme.textTheme.headline3!.apply(
-                            color: Colors.white
-                          ),
-                        )
-                      )
+                            style: themeModel.theme.textTheme.headline3!
+                                .apply(color: Colors.white),
+                          ))
                     ],
                   ),
                   onPressed: () {

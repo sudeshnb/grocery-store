@@ -1,24 +1,27 @@
-import 'package:flutter/cupertino.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/cart_bloc.dart';
 import 'package:grocery/blocs/summary_bloc.dart';
 import 'package:grocery/models/data_models/cart_item.dart';
-import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/data_models/product.dart';
+import 'package:grocery/models/state_models/checkout_model.dart';
 import 'package:grocery/models/state_models/theme_model.dart';
 import 'package:grocery/services/database.dart';
 import 'package:grocery/ui/product_details/product_details.dart';
 import 'package:grocery/widgets/cards/cart_card.dart';
 import 'package:grocery/widgets/fade_in.dart';
-import 'package:provider/provider.dart';
-import 'package:decimal/decimal.dart';
 
 class Summary extends StatefulWidget {
   final SummaryBloc bloc;
 
-  const Summary({required this.bloc});
+  const Summary({
+    Key? key,
+    required this.bloc,
+  }) : super(key: key);
 
   static create(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
@@ -69,11 +72,10 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<CartItem> cartItems = snapshot.data!;
-          if (cartItems.length == 0) {
-            // TODO
-            // SchedulerBinding.instance.addPostFrameCallback((_) {
-            //   Navigator.pop(context);
-            // });
+          if (cartItems.isEmpty) {
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.pop(context);
+            });
 
             return FadeIn(
               child: Column(
@@ -86,7 +88,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                       fit: BoxFit.cover,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 30),
+                      padding: const EdgeInsets.only(top: 30),
                       child: Text(
                         'Nothing found here\nGo and enjoy shopping!',
                         style: themeModel.theme.textTheme.headline3!.apply(
@@ -105,25 +107,23 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                     List<Product> products = snapshot.data!;
                     cartItems = cartItems.where((cartItem) {
                       if (products.where((product) {
-                            if (cartItem.reference == product.reference) {
-                              cartItem.product = product;
-                              return true;
-                            } else {
-                              return false;
-                            }
-                          }).length ==
-                          0) {
+                        if (cartItem.reference == product.reference) {
+                          cartItem.product = product;
+                          return true;
+                        } else {
+                          return false;
+                        }
+                      }).isEmpty) {
                         return false;
                       } else {
                         return true;
                       }
                     }).toList();
 
-                    if (cartItems.length == 0) {
-                      // TODO
-                      // SchedulerBinding.instance.addPostFrameCallback((_) {
-                      //   Navigator.pop(context);
-                      // });
+                    if (cartItems.isEmpty) {
+                      SchedulerBinding.instance!.addPostFrameCallback((_) {
+                        Navigator.pop(context);
+                      });
                       return FadeIn(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                       num order = checkoutModel.getTotal();
                       num total = checkoutModel.getDiscountedTotal();
                       return ListView(
-                        padding: EdgeInsets.only(
+                        padding: const EdgeInsets.only(
                             left: 20, right: 20, top: 20, bottom: 100),
                         children: [
                           ///List of cart items
@@ -185,7 +185,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                       decoration: BoxDecoration(
                                           color:
                                               themeModel.secondBackgroundColor,
-                                          borderRadius: BorderRadius.all(
+                                          borderRadius: const BorderRadius.all(
                                               Radius.circular(15)),
                                           border: Border.all(
                                               color: (initialBuild ||
@@ -212,7 +212,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                                   context, codeController.text);
                                             },
                                             onChanged: (value) {},
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                                 border: InputBorder.none,
                                                 focusedBorder: InputBorder.none,
                                                 enabledBorder: InputBorder.none,
@@ -225,12 +225,12 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                           )),
                                           GestureDetector(
                                             child: Container(
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                   color: Colors.transparent),
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
                                               child: (isLoading)
-                                                  ? CircularProgressIndicator()
+                                                  ? const CircularProgressIndicator()
                                                   : Icon(
                                                       Icons
                                                           .arrow_forward_ios_sharp,
@@ -249,7 +249,8 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     AnimatedSize(
-                                      duration: Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       child: (!initialBuild && !isLoading)
                                           ? FadeIn(
                                               child: Text(
@@ -265,7 +266,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                                                 : Colors.red),
                                               ),
                                             )
-                                          : SizedBox(),
+                                          : const SizedBox(),
                                     ),
                                   ],
                                 );
@@ -273,16 +274,16 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
 
                           ///Total price of orders
                           FadeIn(
-                            duration: Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 400),
                             child: Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Row(
                                 children: [
                                   Text(
                                     'Order:',
                                     style: themeModel.theme.textTheme.bodyText1,
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   Text(
                                     order.toString() + '\$',
                                     style: themeModel.theme.textTheme.headline3!
@@ -295,16 +296,16 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
 
                           ///Delivery price
                           FadeIn(
-                            duration: Duration(milliseconds: 400),
+                            duration: const Duration(milliseconds: 400),
                             child: Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Row(
                                 children: [
                                   Text(
                                     'Delivery:',
                                     style: themeModel.theme.textTheme.bodyText1,
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   Text(
                                     checkoutModel.shippingMethod!.price
                                             .toString() +
@@ -324,15 +325,16 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                 return Column(
                                   children: [
                                     AnimatedSize(
-                                      duration: Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       child: (checkoutModel.coupon == null)
-                                          ? SizedBox()
+                                          ? const SizedBox()
                                           : FadeIn(
-                                              duration:
-                                                  Duration(milliseconds: 400),
+                                              duration: const Duration(
+                                                  milliseconds: 400),
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 10),
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
                                                 child: Row(
                                                   children: [
                                                     Text(
@@ -340,7 +342,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                                       style: themeModel.theme
                                                           .textTheme.bodyText1,
                                                     ),
-                                                    Spacer(),
+                                                    const Spacer(),
                                                     Text(
                                                       "-" +
                                                           Decimal.parse(
@@ -369,9 +371,10 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
 
                                     ///Total price: order + delivery
                                     FadeIn(
-                                      duration: Duration(milliseconds: 400),
+                                      duration:
+                                          const Duration(milliseconds: 400),
                                       child: Padding(
-                                        padding: EdgeInsets.only(top: 10),
+                                        padding: const EdgeInsets.only(top: 10),
                                         child: Row(
                                           children: [
                                             Text(
@@ -379,7 +382,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                                               style: themeModel
                                                   .theme.textTheme.bodyText1,
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                             Text(
                                               total.toString() + '\$',
                                               style: themeModel
@@ -409,7 +412,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
                       ),
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -426,7 +429,7 @@ class _SummaryState extends State<Summary> with TickerProviderStateMixin {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }

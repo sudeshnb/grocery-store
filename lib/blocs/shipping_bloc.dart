@@ -9,7 +9,7 @@ class ShippingBloc {
   final String uid;
 
   ShippingBloc({required this.database, required this.uid, String? selected}) {
-    _selectedShippingController.add(selected);
+    selectedShippingController.add(selected);
   }
 
   ///Get shipping methods
@@ -27,16 +27,16 @@ class ShippingBloc {
     return Rx.combineLatest2(_getShippingMethods(), _getSelectedShipping(),
         (List<ShippingMethod> shippingMethods, String? selectedShipping) {
       bool isSelected = false;
-      shippingMethods.forEach((element) {
+      for (var element in shippingMethods) {
         if (element.id == selectedShipping) {
           element.selected = true;
           isSelected = true;
         } else {
           element.selected = false;
         }
-      });
+      }
 
-      if (shippingMethods.length != 0 && !isSelected) {
+      if (shippingMethods.isNotEmpty && !isSelected) {
         shippingMethods[0].selected = true;
       }
 
@@ -44,15 +44,15 @@ class ShippingBloc {
     });
   }
 
-  StreamController<String?> _selectedShippingController = BehaviorSubject();
+  StreamController<String?> selectedShippingController = BehaviorSubject();
 
   ///Get selected shipping index
   Stream<String?> _getSelectedShipping() {
-    return _selectedShippingController.stream;
+    return selectedShippingController.stream;
   }
 
   ///Update selected shipping index
   Future<void> setSelectedShipping(String value) async {
-    _selectedShippingController.add(value);
+    selectedShippingController.add(value);
   }
 }

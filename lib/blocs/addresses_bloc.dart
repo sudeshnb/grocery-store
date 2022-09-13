@@ -9,12 +9,12 @@ class AddressesBloc {
   final Database database;
 
   AddressesBloc({required this.uid, required this.database, String? selected}) {
-    _selectedAddressController.add(selected);
+    selectedAddressController.add(selected);
   }
 
   ///Update selected address
   Future<void> setSelectedAddress(String id) async {
-    _selectedAddressController.add(id);
+    selectedAddressController.add(id);
   }
 
   ///Delete address
@@ -32,11 +32,11 @@ class AddressesBloc {
         .toList());
   }
 
-  StreamController<String?> _selectedAddressController = BehaviorSubject();
+  StreamController<String?> selectedAddressController = BehaviorSubject();
 
   ///Get selected address
   Stream<String?> _getSelectedAddress() {
-    return _selectedAddressController.stream;
+    return selectedAddressController.stream;
   }
 
   ///Get address and selected address and combine them using RxDart
@@ -44,16 +44,16 @@ class AddressesBloc {
     return Rx.combineLatest2(_getAddresses(), _getSelectedAddress(),
         (List<Address> addresses, String? selectedAddress) {
       bool isSelected = false;
-      addresses.forEach((element) {
+      for (var element in addresses) {
         if (element.id == selectedAddress) {
           element.selected = true;
           isSelected = true;
         } else {
           element.selected = false;
         }
-      });
+      }
 
-      if (addresses.length != 0 && !isSelected) {
+      if (addresses.isNotEmpty && !isSelected) {
         addresses[0].selected = true;
       }
 

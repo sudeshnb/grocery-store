@@ -7,14 +7,12 @@ class SettingsCard extends StatelessWidget {
   final IconData iconData;
   final void Function() onTap;
 
-  const SettingsCard({
-    required this.title,
-    required this.iconData,
-    required this.onTap});
-
-
-
-
+  const SettingsCard(
+      {Key? key,
+      required this.title,
+      required this.iconData,
+      required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +21,16 @@ class SettingsCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: themeModel.secondBackgroundColor,
-          borderRadius:const BorderRadius.all(Radius.circular(15))),
-      margin:const EdgeInsets.only(
+          borderRadius: const BorderRadius.all(Radius.circular(15))),
+      margin: const EdgeInsets.only(
         bottom: 10,
         left: 20,
         right: 20,
       ),
       //   padding: EdgeInsets.all(20),
       child: ListTile(
-        shape: RoundedRectangleBorder(
-          borderRadius:const BorderRadius.all(Radius.circular(15)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         onTap: onTap,
         leading: Icon(
@@ -40,7 +38,7 @@ class SettingsCard extends StatelessWidget {
           color: themeModel.accentColor,
         ),
         title: Text(
-            title,
+          title,
           style: themeModel.theme.textTheme.bodyText1,
         ),
         trailing: Icon(

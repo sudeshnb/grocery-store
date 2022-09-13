@@ -1,20 +1,19 @@
 import 'package:flutter/services.dart';
 
-class Validators{
-
+class Validators {
   ///Valid email
-  static bool email(String email) =>  RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+  static bool email(String email) => RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(email);
 
   ///Valid password
-  static bool password(String password) =>  RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$').hasMatch(password);
+  static bool password(String password) =>
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+          .hasMatch(password);
 
   ///Valid name
-  static bool name(String name)  => name.replaceAll(" ", "").length>=3;
-
-
-
+  static bool name(String name) => name.replaceAll(" ", "").length >= 3;
 }
-
 
 class CardNumberInputFormatter extends TextInputFormatter {
   @override
@@ -26,7 +25,7 @@ class CardNumberInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     for (int i = 0; i < text.length; i++) {
       buffer.write(text[i]);
       var nonZeroIndex = i + 1;
@@ -38,6 +37,6 @@ class CardNumberInputFormatter extends TextInputFormatter {
     var string = buffer.toString();
     return newValue.copyWith(
         text: string,
-        selection: new TextSelection.collapsed(offset: string.length));
+        selection: TextSelection.collapsed(offset: string.length));
   }
 }

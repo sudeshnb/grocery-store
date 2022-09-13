@@ -28,7 +28,7 @@ class HomePageBloc {
 
   bool _canLoadMore = true;
 
-  List<DocumentSnapshot> _lastDocuments = [];
+  List<DocumentSnapshot> lastDocuments = [];
 
   List<Product> savedProducts = [];
 
@@ -55,12 +55,12 @@ class HomePageBloc {
   Future<List<DocumentSnapshot>> _getProducts(int length) async {
     final collection = await (database.getFutureDataFromCollectionWithRange(
         'products',
-        startAfter: _lastDocuments.isEmpty ? null : _lastDocuments.last,
+        startAfter: lastDocuments.isEmpty ? null : lastDocuments.last,
         length: length,
         orderBy: 'date'));
 
     if (collection.docs.isNotEmpty) {
-      _lastDocuments.add(collection.docs.last);
+      lastDocuments.add(collection.docs.last);
     }
 
     return collection.docs;

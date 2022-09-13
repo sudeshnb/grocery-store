@@ -10,36 +10,35 @@ class AddressTextField extends StatelessWidget {
   final String labelText;
   final Function(String) onSubmitted;
   final bool error;
+  // ignore: prefer_typing_uninitialized_variables
   final enabled;
   final bool obscureText;
 
-
-  const AddressTextField({Key? key,
-    required this.controller,
-    required this.focusNode,
-    required this.textInputType,
-    required this.textInputAction,
-    required this.labelText,
-    required this.onSubmitted,
-    required this.error,
-    required this.enabled,
-  this.obscureText=false
-
-  }) : super(key: key);
+  const AddressTextField(
+      {Key? key,
+      required this.controller,
+      required this.focusNode,
+      required this.textInputType,
+      required this.textInputAction,
+      required this.labelText,
+      required this.onSubmitted,
+      required this.error,
+      required this.enabled,
+      this.obscureText = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final themeModel=Provider.of<ThemeModel>(context);
+    final themeModel = Provider.of<ThemeModel>(context);
 
     return Container(
-
       decoration: BoxDecoration(
           color: themeModel.secondBackgroundColor,
-          borderRadius:const BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           border: Border.all(
               color: (error) ? Colors.red : themeModel.secondBackgroundColor,
               width: 2)),
-      padding:const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: TextField(
         enabled: enabled,
         textCapitalization: TextCapitalization.words,
@@ -57,7 +56,7 @@ class AddressTextField extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             labelText: labelText,
-            contentPadding:const EdgeInsets.only(left: 20, right: 20)),
+            contentPadding: const EdgeInsets.only(left: 20, right: 20)),
       ),
     );
   }

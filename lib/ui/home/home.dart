@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:grocery/blocs/home_page_bloc.dart';
 import 'package:grocery/models/state_models/bottom_navigation_bar_model.dart';
 import 'package:grocery/models/state_models/home_model.dart';
@@ -9,13 +11,15 @@ import 'package:grocery/ui/home/cart/cart.dart';
 import 'package:grocery/ui/home/home_page.dart';
 import 'package:grocery/ui/home/search.dart';
 import 'package:grocery/ui/home/settings/settings.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
   final HomeModel model;
 
-  const Home({required this.model});
+  const Home({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
@@ -60,7 +64,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-          key: Key("home"),
+          key: const Key("home"),
           extendBody: true,
           body: PageView(
             controller: widget.model.pageController,
